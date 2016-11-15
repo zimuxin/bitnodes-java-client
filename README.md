@@ -3,18 +3,33 @@
 
 ###Usage
 ```java
-
-
+int permistPerSecond = 2;
+Bitnodes client = BitnodesFactory.create(permistPerSecond);
+BitnodesSnapshots snapshotsPage = client.getSnapshots();
+BitnodesSnapshot snapshot = snapshotsPage.getResults().get(0);
+BitnodesNodes nodes = client.getNodes(snapshot);
+nodes.getNodes().forEach((nodeAddress, node) -> {
+  System.out.format("%s: %s%n", nodeAddress, node);
+});
 ```
 
-###Dependency Management
-####Gradle
-```groovy
-repositories {
-   jcenter()
-}
+### List Snapshots
 
-dependencies {
-   compile 'engineering.clientside:bitnodes-java-client:+'
-}
+
+
+### Dependencies
+
+```
+\ engineering.clientside:bitnodes-java-throttled-client
++--- project :bitnodes-java-api
+|    \--- io.github.openfeign:feign-core
+|         \--- org.jvnet:animal-sniffer-annotation
++--- project :bitnodes-java-dslplatform-data
+|    +--- project :bitnodes-java-api 
+|    +--- io.github.openfeign:feign-core 
+|    \--- com.dslplatform:dsl-json-java8 
+|         \--- com.dslplatform:dsl-json 
++--- io.github.openfeign:feign-core 
++--- com.fabahaba:throttle
+\--- com.dslplatform:dsl-json-java8 
 ```

@@ -116,12 +116,12 @@ subprojects {
     key = "$System.env.BINTRAY_API_KEY"
     publications = ['mavenJava']
     pkg {
-      repo = 'libs'
+      repo = 'clients'
       name = scmVersion.tag.prefix
       desc = 'Bitnodes Java Client'
-      websiteUrl = 'https://github.com/jamespedwards42/' + project.name
-      vcsUrl = 'https://github.com/jamespedwards42/' + project.name
-      issueTrackerUrl = 'https://github.com/jamespedwards42/' + project.name + '/issues'
+      websiteUrl = 'https://github.com/client-side/' + project.name
+      vcsUrl = 'https://github.com/client-side/' + project.name
+      issueTrackerUrl = 'https://github.com/client-side/' + project.name + '/issues'
       licenses = ["Apache-2.0"]
       publish = true
       version {

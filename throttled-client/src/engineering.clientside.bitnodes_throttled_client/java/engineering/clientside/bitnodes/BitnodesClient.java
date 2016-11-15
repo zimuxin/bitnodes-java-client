@@ -33,7 +33,7 @@ final class BitnodesClient implements Bitnodes {
 
   @Override
   public BitnodesSnapshots getSnapshots() {
-    return null;
+    return getDelegate().getSnapshots();
   }
 
   @Override
