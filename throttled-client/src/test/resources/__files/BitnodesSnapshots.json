@@ -1,0 +1,49 @@
+{
+  "count": 60356,
+  "next": "https://bitnodes.21.co/api/v1/snapshots/?limit=7&page=3",
+  "previous": "https://bitnodes.21.co/api/v1/snapshots/?limit=7",
+  "results": [
+    {
+      "url": "https://bitnodes.21.co/api/v1/snapshots/1479100174/",
+      "timestamp": 1479100174,
+      "total_nodes": 5333,
+      "latest_height": 438810
+    },
+    {
+      "url": "https://bitnodes.21.co/api/v1/snapshots/1479099901/",
+      "timestamp": 1479099901,
+      "total_nodes": 5320,
+      "latest_height": 438810
+    },
+    {
+      "url": "https://bitnodes.21.co/api/v1/snapshots/1479099618/",
+      "timestamp": 1479099618,
+      "total_nodes": 5331,
+      "latest_height": 438809
+    },
+    {
+      "url": "https://bitnodes.21.co/api/v1/snapshots/1479099355/",
+      "timestamp": 1479099355,
+      "total_nodes": 5340,
+      "latest_height": 438808
+    },
+    {
+      "url": "https://bitnodes.21.co/api/v1/snapshots/1479099072/",
+      "timestamp": 1479099072,
+      "total_nodes": 5342,
+      "latest_height": 438807
+    },
+    {
+      "url": "https://bitnodes.21.co/api/v1/snapshots/1479098789/",
+      "timestamp": 1479098789,
+      "total_nodes": 5335,
+      "latest_height": 438807
+    },
+    {
+      "url": "https://bitnodes.21.co/api/v1/snapshots/1479098506/",
+      "timestamp": 1479098506,
+      "total_nodes": 5334,
+      "latest_height": 438807
+    }
+  ]
+}

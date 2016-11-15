@@ -1,0 +1,19 @@
+{
+  "count": 54682,
+  "next": "https://bitnodes.21.co/api/v1/snapshots/?page=2",
+  "previous": null,
+  "results": [
+    {
+      "url": "https://bitnodes.21.co/api/v1/snapshots/1418443208/",
+      "timestamp": 1418443208,
+      "total_nodes": 6162,
+      "latest_height": 334083
+    },
+    {
+      "url": "https://bitnodes.21.co/api/v1/snapshots/1418440197/",
+      "timestamp": 1418440197,
+      "total_nodes": 6169,
+      "latest_height": 334077
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "hostname": "",
+  "address": "23.108.83.12",
+  "status": "UP",
+  "data": [
+    70014,
+    "/Satoshi:0.13.1/",
+    1479134182,
+    13,
+    438894,
+    "1BiTNoDEjPAq819owJ2wSa8ZqoJc6ff8vk",
+    "Hayward",
+    "US",
+    37.6745,
+    -122.0883,
+    "America/Los_Angeles",
+    "AS15003",
+    "Nobis Technology Group, LLC"
+  ],
+  "bitcoin_address": "1BiTNoDEjPAq819owJ2wSa8ZqoJc6ff8vk",
+  "url": "http://23.108.83.12:411",
+  "verified": true
+}

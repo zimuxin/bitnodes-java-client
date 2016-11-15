@@ -1,0 +1,23 @@
+{
+  "hostname": "bitcoin.fsf.org",
+  "address": "208.118.235.153",
+  "status": "UP",
+  "data": [
+    70001,
+    "/Satoshi:0.8.1/",
+    1418440191,
+    1,
+    334083,
+    "bitcoin.fsf.org",
+    "Boston",
+    "US",
+    42.3584,
+    -71.0598,
+    "America/New_York",
+    "AS22989",
+    "Free Software Foundation, Inc."
+  ],
+  "bitcoin_address": "",
+  "url": "",
+  "verified": false
+}

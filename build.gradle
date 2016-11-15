@@ -1,0 +1,215 @@
+buildscript {
+  repositories {
+    maven {
+      maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+      jcenter()
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "pl.allegro.tech.build:axion-release-plugin:1.4.1"
+    classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3"
+  }
+}
+
+subprojects {
+  apply plugin: 'java'
+  apply plugin: 'maven-publish'
+  apply plugin: "pl.allegro.tech.build.axion-release"
+  apply plugin: "com.jfrog.bintray"
+  // apply plugin: 'findbugs'
+  apply plugin: "checkstyle"
+
+  // TEMP FIX: https://github.com/gradle/gradle/issues/778
+  compileJava {
+    options.fork = true
+  }
+
+  scmVersion {
+    tag {
+      prefix = project.name
+    }
+
+    repository {
+      customUsername = "$AXION_RELEASE_GITHUB_TOKEN"
+      customPassword = ""
+      pushTagsOnly = true
+    }
+  }
+
+  project.group = 'engineering.clientside'
+  project.version = scmVersion.version
+
+  sourceCompatibility = JavaVersion.VERSION_1_9
+  targetCompatibility = JavaVersion.VERSION_1_9
+
+  repositories {
+    maven { url "/Users/james/.m2/repository/" }
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+    jcenter()
+  }
+
+  //  findbugs {
+  //    toolVersion = "+"
+  //    reportsDir = file("$project.buildDir/findbugs")
+  //    effort = "max"
+  //    reportLevel = "low"
+  //    ignoreFailures = false
+  //    excludeFilter = file("${parent.projectDir}/findbugs-exclude.xml")
+  //  }
+  //
+  //  tasks.withType(FindBugs) {
+  //    reports {
+  //      xml.enabled = false
+  //      html.enabled = true
+  //    }
+  //  }
+
+  checkstyle {
+    config = resources.text.fromFile("${parent.projectDir}/checkstyle/google-checks.xml")
+    configProperties = [samedir: "${parent.projectDir}/checkstyle"]
+    reportsDir = file("$project.buildDir/checkstyleReports")
+    toolVersion = "+"
+    ignoreFailures = false
+  }
+
+  jar {
+    // [baseName]-[appendix]-[version]-[classifier].[extension]
+    baseName scmVersion.tag.prefix
+    version = project.version
+    extension 'jar'
+    zip64 = true
+  }
+
+  task sourcesJar(type: Jar, dependsOn: classes) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+  }
+
+  task javadocJar(type: Jar, dependsOn: javadoc) {
+    from javadoc.destinationDir
+    classifier 'javadoc'
+  }
+
+  publishing {
+    publications {
+      mavenJava(MavenPublication) {
+        from components.java
+
+        groupId = project.group
+        artifactId = scmVersion.tag.prefix
+        version = project.version
+
+        artifact sourcesJar
+        artifact javadocJar
+      }
+    }
+  }
+
+  artifacts {
+    archives sourcesJar
+    archives javadocJar
+  }
+
+  bintray {
+    user = "$System.env.BINTRAY_USER"
+    key = "$System.env.BINTRAY_API_KEY"
+    publications = ['mavenJava']
+    pkg {
+      repo = 'libs'
+      name = scmVersion.tag.prefix
+      desc = 'Bitnodes Java Client'
+      websiteUrl = 'https://github.com/jamespedwards42/' + project.name
+      vcsUrl = 'https://github.com/jamespedwards42/' + project.name
+      issueTrackerUrl = 'https://github.com/jamespedwards42/' + project.name + '/issues'
+      licenses = ["Apache-2.0"]
+      publish = true
+      version {
+        name = project.version
+        vcsTag = scmVersion.tag.prefix + '-' + project.version
+        gpg {
+          sign = true
+          passphrase = "$System.env.BINTRAY_GPG_PASSPHRASE"
+        }
+      }
+    }
+  }
+
+  bintrayUpload.onlyIf { !project.version.endsWith('SNAPSHOT') }
+}
+
+project(':bitnodes-java-api') {
+  dependencies {
+    compile 'io.github.openfeign:feign-core:+'
+  }
+
+  sourceSets {
+    main {
+      java {
+        srcDir 'src/engineering.clientside.bitnodes_api/java'
+      }
+    }
+  }
+}
+
+project(':bitnodes-java-dslplatform-data') {
+  dependencies {
+    compile project(':bitnodes-java-api')
+    compile 'io.github.openfeign:feign-core:+'
+    compileOnly 'com.dslplatform:dsl-json-processor:+'
+    compile 'com.dslplatform:dsl-json-java8:+'
+
+    testCompile 'junit:junit:+'
+  }
+
+  sourceSets {
+    main {
+      java {
+        srcDir 'src/engineering.clientside.bitnodes_dslplatform_data/java'
+      }
+    }
+  }
+}
+
+project(':bitnodes-java-throttled-client') {
+  dependencies {
+    compile project(':bitnodes-java-api')
+    compile project(':bitnodes-java-dslplatform-data')
+    compile 'io.github.openfeign:feign-core:+'
+    compile 'com.fabahaba:throttle:+'
+    compile 'com.dslplatform:dsl-json-java8:+'
+
+    testCompile 'junit:junit:+'
+    testCompile "com.github.tomakehurst:wiremock:+"
+  }
+
+  sourceSets {
+    main {
+      java {
+        srcDir 'src/engineering.clientside.bitnodes_throttled_client/java'
+      }
+    }
+  }
+}
+
+gradle.addListener(new TestEventLogger())
+
+class TestEventLogger implements org.gradle.api.tasks.testing.TestListener {
+
+  void beforeSuite(TestDescriptor suite) {
+    if (suite.getClassName() != null) {
+      println 'Running ' + suite.getClassName() + ' test suite.'
+    }
+  }
+
+  void afterSuite(TestDescriptor suite, TestResult result) {
+  }
+
+  void beforeTest(TestDescriptor test) {
+    println '\n' + test.getName() + ' STARTED @ ' + new Date().toTimestamp()
+  }
+
+  void afterTest(TestDescriptor test, TestResult result) {
+    println test.getName() + ' ' + result.getResultType() + ' in ' + (result.getEndTime() - result.getStartTime()) + 'ms.'
+  }
+}
