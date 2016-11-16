@@ -49,7 +49,7 @@ String url = "http://[" + nodeAddress + ']';
 client.postNodeBitcoinAddress(bitcoinAddress, url, nodeAddress);
 ```
 
-### [Get IPV4/IPV6 Nodes From DNS Seed](https://bitnodes.21.co/api/#dns-seeder)
+### [Get IPV4/6 Nodes From DNS Seed](https://bitnodes.21.co/api/#dns-seeder)
 ```java
 Bitnodes client = BitnodesFactory.create();
 InetAddress[] nodeAddresses = client.getSeededNodeRecords();

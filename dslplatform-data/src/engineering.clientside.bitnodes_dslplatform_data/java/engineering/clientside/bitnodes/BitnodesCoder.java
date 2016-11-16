@@ -29,11 +29,10 @@ public final class BitnodesCoder implements Decoder, Encoder {
   static final DslJson<Object> dslJson = new DslJson<>();
   private static final ThreadLocal<byte[]> buffer = ThreadLocal.withInitial(() -> new byte[4_096]);
   private static final ThreadLocal<JsonWriter> writer = ThreadLocal
-      .withInitial(() -> new JsonWriter(4_096));
+      .withInitial(() -> new JsonWriter(buffer.get()));
 
   @Override
   public Object decode(final Response response, final Type type) throws IOException {
-    //dsl_json.ExternalSerialization.configure(dslJson);
     final Response.Body body = response.body();
     if (body == null) {
       throw new IOException("Empty response:" + response);
@@ -52,13 +51,6 @@ public final class BitnodesCoder implements Decoder, Encoder {
       template.body(body, UTF_8);
     } catch (final IOException e) {
       throw new UncheckedIOException(e);
-    }
-  }
-
-  byte[] serialize(final Object object) throws IOException {
-    try (final JsonWriter localWriter = writer.get()) {
-      dslJson.serialize(localWriter, object);
-      return localWriter.toByteArray();
     }
   }
 }

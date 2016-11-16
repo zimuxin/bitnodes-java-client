@@ -15,10 +15,11 @@ buildscript {
 subprojects {
   apply plugin: 'java'
   apply plugin: 'maven-publish'
-  apply plugin: "pl.allegro.tech.build.axion-release"
-  apply plugin: "com.jfrog.bintray"
+  apply plugin: 'pl.allegro.tech.build.axion-release'
+  apply plugin: 'com.jfrog.bintray'
   // apply plugin: 'findbugs'
-  apply plugin: "checkstyle"
+  apply plugin: 'checkstyle'
+  apply plugin: 'jacoco'
 
   // TEMP FIX: https://github.com/gradle/gradle/issues/778
   compileJava {
@@ -71,6 +72,21 @@ subprojects {
     reportsDir = file("$project.buildDir/checkstyleReports")
     toolVersion = "+"
     ignoreFailures = false
+  }
+
+  jacoco {
+    toolVersion = "+"
+  }
+
+  jacocoTestReport {
+    reports {
+      csv.enabled false
+    }
+    afterEvaluate {
+      classDirectories = files(classDirectories.files.collect {
+        fileTree(dir: it, exclude: 'dsl_json/**')
+      })
+    }
   }
 
   jar {
