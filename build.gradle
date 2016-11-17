@@ -136,9 +136,10 @@ subprojects {
       repo = 'clients'
       name = scmVersion.tag.prefix
       desc = 'Bitnodes Java Client'
-      websiteUrl = 'https://github.com/client-side/' + project.name
-      vcsUrl = 'https://github.com/client-side/' + project.name
-      issueTrackerUrl = 'https://github.com/client-side/' + project.name + '/issues'
+      githubRepo = 'client-side/' + parent.name
+      websiteUrl = 'https://github.com/client-side/' + parent.name
+      vcsUrl = 'https://github.com/client-side/' + parent.name
+      issueTrackerUrl = 'https://github.com/client-side/' + parent.name + '/issues'
       licenses = ["Apache-2.0"]
       publish = true
       version {
