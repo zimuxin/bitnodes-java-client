@@ -191,7 +191,7 @@ project(':bitnodes-java-dslplatform-data') {
   }
 }
 
-project(':bitnodes-java-throttled-client') {
+project(':bitnodes-java-throttle-client') {
   dependencies {
     compile project(':bitnodes-java-api')
     compile project(':bitnodes-java-dslplatform-data')

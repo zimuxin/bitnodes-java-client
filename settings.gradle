@@ -1,8 +1,8 @@
 rootProject.name = 'bitnodes-java-client'
 
-include 'api', 'dslplatform-data', 'throttled-client', 'hystrix-client'
+include 'api', 'dslplatform-data', 'throttle-client', 'hystrix-client'
 
 project(':api').name = "bitnodes-java-api"
 project(':dslplatform-data').name = "bitnodes-java-dslplatform-data"
-project(':throttled-client').name = "bitnodes-java-throttled-client"
+project(':throttle-client').name = "bitnodes-java-throttle-client"
 project(':hystrix-client').name = "bitnodes-java-hystrix-client"
