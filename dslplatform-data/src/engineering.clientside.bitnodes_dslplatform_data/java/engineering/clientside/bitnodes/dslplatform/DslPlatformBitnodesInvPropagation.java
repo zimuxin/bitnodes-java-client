@@ -2,12 +2,13 @@ package engineering.clientside.bitnodes.dslplatform;
 
 import com.dslplatform.json.CompiledJson;
 import com.dslplatform.json.JsonAttribute;
-import engineering.clientside.bitnodes.BitnodesInvArrivalStamp;
-import engineering.clientside.bitnodes.BitnodesInvPropagation;
 
 import java.util.List;
 
-@CompiledJson(baseReaders = {BitnodesInvPropagation.class})
+import engineering.clientside.bitnodes.BitnodesInvArrivalStamp;
+import engineering.clientside.bitnodes.BitnodesInvPropagation;
+
+@CompiledJson
 public final class DslPlatformBitnodesInvPropagation implements BitnodesInvPropagation {
 
   @JsonAttribute(name = "inv_hash", nullable = false)

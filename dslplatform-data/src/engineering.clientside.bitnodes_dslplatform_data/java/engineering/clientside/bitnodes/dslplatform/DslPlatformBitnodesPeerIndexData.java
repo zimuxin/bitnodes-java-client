@@ -4,7 +4,7 @@ import com.dslplatform.json.CompiledJson;
 import com.dslplatform.json.JsonAttribute;
 import engineering.clientside.bitnodes.BitnodesPeerIndexData;
 
-@CompiledJson(baseReaders = {BitnodesPeerIndexData.class})
+@CompiledJson
 public final class DslPlatformBitnodesPeerIndexData implements BitnodesPeerIndexData {
 
   @JsonAttribute(nullable = false)

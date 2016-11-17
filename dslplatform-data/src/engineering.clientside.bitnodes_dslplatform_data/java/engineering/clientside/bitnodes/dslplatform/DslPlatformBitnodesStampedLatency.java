@@ -4,7 +4,7 @@ import com.dslplatform.json.CompiledJson;
 import com.dslplatform.json.JsonAttribute;
 import engineering.clientside.bitnodes.BitnodesStampedLatency;
 
-@CompiledJson(baseReaders = {BitnodesStampedLatency.class})
+@CompiledJson
 public final class DslPlatformBitnodesStampedLatency implements BitnodesStampedLatency {
 
   @JsonAttribute(name = "t", nullable = false)

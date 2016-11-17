@@ -4,7 +4,7 @@ import com.dslplatform.json.CompiledJson;
 import com.dslplatform.json.JsonAttribute;
 import engineering.clientside.bitnodes.BitnodesSnapshot;
 
-@CompiledJson(baseReaders = {BitnodesSnapshot.class})
+@CompiledJson
 public final class DslPlatformBitnodesSnapshot implements BitnodesSnapshot {
 
   @JsonAttribute(nullable = false)

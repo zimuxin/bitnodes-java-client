@@ -2,11 +2,12 @@ package engineering.clientside.bitnodes.dslplatform;
 
 import com.dslplatform.json.CompiledJson;
 import com.dslplatform.json.JsonAttribute;
-import engineering.clientside.bitnodes.BitnodesNodeLatency;
 
 import java.util.List;
 
-@CompiledJson(baseReaders = {BitnodesNodeLatency.class})
+import engineering.clientside.bitnodes.BitnodesNodeLatency;
+
+@CompiledJson
 public final class DslPlatformBitnodesNodeLatency implements BitnodesNodeLatency {
 
   @JsonAttribute(name = "daily_latency", nullable = false)

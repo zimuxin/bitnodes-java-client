@@ -2,12 +2,13 @@ package engineering.clientside.bitnodes.dslplatform;
 
 import com.dslplatform.json.CompiledJson;
 import com.dslplatform.json.JsonAttribute;
-import engineering.clientside.bitnodes.BitnodesSnapshot;
-import engineering.clientside.bitnodes.BitnodesSnapshots;
 
 import java.util.List;
 
-@CompiledJson(baseReaders = {BitnodesSnapshots.class})
+import engineering.clientside.bitnodes.BitnodesSnapshot;
+import engineering.clientside.bitnodes.BitnodesSnapshots;
+
+@CompiledJson
 public final class DslPlatformBitnodesSnapshots extends DslPlatformBitnodesPage implements
     BitnodesSnapshots {
 

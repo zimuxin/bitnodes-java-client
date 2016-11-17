@@ -4,7 +4,7 @@ import com.dslplatform.json.CompiledJson;
 import com.dslplatform.json.JsonAttribute;
 import engineering.clientside.bitnodes.BitnodesInvArrivalStats;
 
-@CompiledJson(baseReaders = {BitnodesInvArrivalStats.class})
+@CompiledJson
 public final class DslPlatformBitnodesInvArrivalStats implements BitnodesInvArrivalStats {
 
   @JsonAttribute(name = "std", nullable = false)

@@ -5,7 +5,7 @@ import com.dslplatform.json.JsonAttribute;
 import engineering.clientside.bitnodes.BitnodesNode;
 import engineering.clientside.bitnodes.BitnodesNodeStatus;
 
-@CompiledJson(baseReaders = {BitnodesNodeStatus.class})
+@CompiledJson
 public final class DslPlatformBitnodesNodeStatus implements BitnodesNodeStatus {
 
   @JsonAttribute(nullable = false)

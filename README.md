@@ -1,4 +1,4 @@
-#[Bitnodes](https://bitnodes.21.co/api/) Java client [![Build Status](https://travis-ci.org/client-side/bitnodes-java-client.svg?branch=master)](https://travis-ci.org/client-side/bitnodes-java-client) [![JCenter](https://api.bintray.com/packages/client-side/libs/bitnodes-java-client/images/download.svg) ](https://bintray.com/client-side/libs/bitnodes-java-client/_latestVersion) [![License](http://img.shields.io/badge/license-Apache--2-blue.svg?style=flat) ](http://www.apache.org/licenses/LICENSE-2.0)
+# [Bitnodes](https://bitnodes.21.co/api/) Java Client [![Build Status](https://travis-ci.org/client-side/bitnodes-java-client.svg?branch=master)](https://travis-ci.org/client-side/bitnodes-java-client)  [![License](http://img.shields.io/badge/license-Apache--2-blue.svg?style=flat) ](http://www.apache.org/licenses/LICENSE-2.0)
 
 ### [List Snapshots](https://bitnodes.21.co/api/#list-snapshots) & [Nodes](https://bitnodes.21.co/api/#list-nodes)
 ```java
@@ -57,19 +57,35 @@ InetAddress[] ipv4Nodes = client.getIPV4SeededNodeRecords();
 InetAddress[] ipv6Nodes = client.getIPV6SeededNodeRecords();
 ```
 
-### Dependencies
+## Dependencies
 
 ```
 \ engineering.clientside:bitnodes-java-throttled-client
 +--- project :bitnodes-java-api
 |    \--- io.github.openfeign:feign-core
-|         \--- org.jvnet:animal-sniffer-annotation
 +--- project :bitnodes-java-dslplatform-data
-|    +--- project :bitnodes-java-api 
-|    +--- io.github.openfeign:feign-core 
-|    \--- com.dslplatform:dsl-json-java8 
-|         \--- com.dslplatform:dsl-json 
-+--- io.github.openfeign:feign-core 
+|    +--- project :bitnodes-java-api (*)
+|    \--- com.dslplatform:dsl-json
++--- io.github.openfeign:feign-core
 +--- com.fabahaba:throttle
-\--- com.dslplatform:dsl-json-java8 
+```
+
+*  [![:bitnodes-java-api:](https://api.bintray.com/packages/client-side/clients/bitnodes-java-api/images/download.svg) ](https://bintray.com/client-side/clients/bitnodes-java-api/_latestVersion)
+*  [![:bitnodes-java-dslplatform-data:](https://api.bintray.com/packages/client-side/clients/bitnodes-java-dslplatform-data/images/download.svg) ](https://bintray.com/client-side/clients/bitnodes-java-dslplatform-data/_latestVersion)
+*  [![:bitnodes-java-throttled-client:](https://api.bintray.com/packages/client-side/clients/bitnodes-java-throttled-client/images/download.svg) ](https://bintray.com/client-side/clients/bitnodes-java-throttled-client/_latestVersion)
+
+## Developer Builds
+
+This is primarily a Java project, however, the dependency on `com.dslplatform:dsl-json` requires [Mono](http://www.mono-project.com/) to compile.  The Docker image [comodal/alpine-jdk-mono](https://hub.docker.com/r/comodal/alpine-jdk-mono/) can be used so that you do not have to install Mono.
+
+### Docker Compile Example
+```sh
+user ~/git/bitnodes-java-client > docker run --rm -it \
+  -v $GRADLE_USER_HOME:/root/.gradle \
+  -v $(pwd):/bitnodes/ \
+  -w /bitnodes \
+  comodal/alpine-jdk-mono:latest sh
+root /bitnodes > ./gradlew compileJava
+Starting a Gradle Daemon
+...
 ```

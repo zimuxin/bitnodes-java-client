@@ -2,12 +2,13 @@ package engineering.clientside.bitnodes.dslplatform;
 
 import com.dslplatform.json.CompiledJson;
 import com.dslplatform.json.JsonAttribute;
-import engineering.clientside.bitnodes.BitnodesLeaderboard;
-import engineering.clientside.bitnodes.BitnodesPeerIndexData;
 
 import java.util.List;
 
-@CompiledJson(baseReaders = {BitnodesLeaderboard.class})
+import engineering.clientside.bitnodes.BitnodesLeaderboard;
+import engineering.clientside.bitnodes.BitnodesPeerIndexData;
+
+@CompiledJson
 public final class DslPlatformBitnodesLeaderboard extends DslPlatformBitnodesPage implements
     BitnodesLeaderboard {
 

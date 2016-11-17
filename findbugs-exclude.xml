@@ -1,5 +1,5 @@
 <FindBugsFilter>
-    <Match>
-        <Package name="~dsl_json.*" />
-    </Match>
+  <Match>
+    <Package name="~dsl_json.*"/>
+  </Match>
 </FindBugsFilter>

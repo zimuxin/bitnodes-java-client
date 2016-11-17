@@ -3,7 +3,7 @@ package engineering.clientside.bitnodes.dslplatform;
 import com.dslplatform.json.CompiledJson;
 import engineering.clientside.bitnodes.BitnodesPostResponse;
 
-@CompiledJson(baseReaders = {BitnodesPostResponse.class})
+@CompiledJson
 public final class DslPlatformBitnodesPostResponse implements BitnodesPostResponse {
 
   public boolean success;

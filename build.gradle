@@ -30,7 +30,6 @@ subprojects {
     tag {
       prefix = project.name
     }
-
     repository {
       customUsername = "$AXION_RELEASE_GITHUB_TOKEN"
       customPassword = ""
@@ -156,7 +155,9 @@ subprojects {
 
 project(':bitnodes-java-api') {
   dependencies {
-    compile 'io.github.openfeign:feign-core:+'
+    compile('io.github.openfeign:feign-core:+') {
+      exclude module: 'animal-sniffer-annotation'
+    }
   }
 
   sourceSets {
@@ -171,9 +172,8 @@ project(':bitnodes-java-api') {
 project(':bitnodes-java-dslplatform-data') {
   dependencies {
     compile project(':bitnodes-java-api')
-    compile 'io.github.openfeign:feign-core:+'
     compileOnly 'com.dslplatform:dsl-json-processor:+'
-    compile 'com.dslplatform:dsl-json-java8:+'
+    compile 'com.dslplatform:dsl-json:+'
 
     testCompile 'junit:junit:+'
   }
@@ -191,9 +191,10 @@ project(':bitnodes-java-throttled-client') {
   dependencies {
     compile project(':bitnodes-java-api')
     compile project(':bitnodes-java-dslplatform-data')
-    compile 'io.github.openfeign:feign-core:+'
+    compile('io.github.openfeign:feign-core:+') {
+      exclude group: 'org.jvnet', module: 'animal-sniffer-annotation'
+    }
     compile 'com.fabahaba:throttle:+'
-    compile 'com.dslplatform:dsl-json-java8:+'
 
     testCompile 'junit:junit:+'
     testCompile "com.github.tomakehurst:wiremock:+"
@@ -205,27 +206,5 @@ project(':bitnodes-java-throttled-client') {
         srcDir 'src/engineering.clientside.bitnodes_throttled_client/java'
       }
     }
-  }
-}
-
-gradle.addListener(new TestEventLogger())
-
-class TestEventLogger implements org.gradle.api.tasks.testing.TestListener {
-
-  void beforeSuite(TestDescriptor suite) {
-    if (suite.getClassName() != null) {
-      println 'Running ' + suite.getClassName() + ' test suite.'
-    }
-  }
-
-  void afterSuite(TestDescriptor suite, TestResult result) {
-  }
-
-  void beforeTest(TestDescriptor test) {
-    println '\n' + test.getName() + ' STARTED @ ' + new Date().toTimestamp()
-  }
-
-  void afterTest(TestDescriptor test, TestResult result) {
-    println test.getName() + ' ' + result.getResultType() + ' in ' + (result.getEndTime() - result.getStartTime()) + 'ms.'
   }
 }

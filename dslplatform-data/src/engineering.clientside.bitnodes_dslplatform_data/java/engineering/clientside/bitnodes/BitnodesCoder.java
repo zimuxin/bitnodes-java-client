@@ -8,6 +8,16 @@ import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.lang.reflect.Type;
 
+import engineering.clientside.bitnodes.dslplatform.DslPlatformBitnodesInvArrivalStats;
+import engineering.clientside.bitnodes.dslplatform.DslPlatformBitnodesInvPropagation;
+import engineering.clientside.bitnodes.dslplatform.DslPlatformBitnodesLeaderboard;
+import engineering.clientside.bitnodes.dslplatform.DslPlatformBitnodesNodeLatency;
+import engineering.clientside.bitnodes.dslplatform.DslPlatformBitnodesNodeStatus;
+import engineering.clientside.bitnodes.dslplatform.DslPlatformBitnodesPeerIndexData;
+import engineering.clientside.bitnodes.dslplatform.DslPlatformBitnodesPostResponse;
+import engineering.clientside.bitnodes.dslplatform.DslPlatformBitnodesSnapshot;
+import engineering.clientside.bitnodes.dslplatform.DslPlatformBitnodesSnapshots;
+import engineering.clientside.bitnodes.dslplatform.DslPlatformBitnodesStampedLatency;
 import feign.RequestTemplate;
 import feign.Response;
 import feign.codec.Decoder;
@@ -26,7 +36,29 @@ public final class BitnodesCoder implements Decoder, Encoder {
     return singleton;
   }
 
-  static final DslJson<Object> dslJson = new DslJson<>();
+  private static final DslJson<Object> dslJson = new DslJson<>();
+
+  private static void registerInterface(final Class<?> clas) {
+    for (final Class<?> iface : clas.getInterfaces()) {
+      if (iface.getPackageName().equals("engineering.clientside.bitnodes")) {
+        dslJson.registerReader(iface, dslJson.tryFindReader(clas));
+      }
+    }
+  }
+
+  static {
+    registerInterface(DslPlatformBitnodesInvArrivalStats.class);
+    registerInterface(DslPlatformBitnodesInvPropagation.class);
+    registerInterface(DslPlatformBitnodesLeaderboard.class);
+    registerInterface(DslPlatformBitnodesNodeLatency.class);
+    registerInterface(DslPlatformBitnodesNodeStatus.class);
+    registerInterface(DslPlatformBitnodesPeerIndexData.class);
+    registerInterface(DslPlatformBitnodesPostResponse.class);
+    registerInterface(DslPlatformBitnodesSnapshot.class);
+    registerInterface(DslPlatformBitnodesSnapshots.class);
+    registerInterface(DslPlatformBitnodesStampedLatency.class);
+  }
+
   private static final ThreadLocal<byte[]> buffer = ThreadLocal.withInitial(() -> new byte[4_096]);
   private static final ThreadLocal<JsonWriter> writer = ThreadLocal
       .withInitial(() -> new JsonWriter(buffer.get()));
