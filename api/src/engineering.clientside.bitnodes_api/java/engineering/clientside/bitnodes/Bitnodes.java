@@ -26,20 +26,25 @@ public interface Bitnodes {
     return create(Feign.builder(), Bitnodes.API_URL);
   }
 
+  static <T extends Bitnodes> T create(final Class<T> apiType) {
+    return create(Feign.builder(), apiType, Bitnodes.API_URL);
+  }
+
   static Bitnodes create(final Feign.Builder feignBuilder) {
     return create(feignBuilder, Bitnodes.API_URL);
   }
 
-  static Bitnodes create(final Feign.Builder feignBuilder, final String apiUrl) {
-    final BitnodesCoder coder = getCoder();
-    if (coder != null) {
-      feignBuilder.decoder(coder).encoder(coder);
-    }
-    return feignBuilder.target(Bitnodes.class, apiUrl);
+  static <T extends Bitnodes> T create(final Feign.Builder feignBuilder, final Class<T> apiType) {
+    return create(feignBuilder, apiType, Bitnodes.API_URL);
   }
 
-  static BitnodesCoder getCoder() {
-    return BitnodesCoderProvider.getCoder();
+  static Bitnodes create(final Feign.Builder feignBuilder, final String apiUrl) {
+    return create(feignBuilder, Bitnodes.class, apiUrl);
+  }
+
+  static <T extends Bitnodes> T create(final Feign.Builder feignBuilder, final Class<T> apiType,
+      final String apiUrl) {
+    return BitnodesCoderProvider.configureCoder(feignBuilder).target(apiType, apiUrl);
   }
 
   @RequestLine(BASE_GET_PATH + "snapshots/?limit={limit}&page={page}")

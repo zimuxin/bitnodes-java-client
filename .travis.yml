@@ -30,4 +30,5 @@ install: ./gradlew -version
 
 script: if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ ! -z "$TRAVIS_TAG" ] ; then echo $TRAVIS_TAG | sed 's/\-[0-9]*\.[0-9]*\.[0-9]*//g' | xargs -I {} ./gradlew {}:check; else ./gradlew check; fi
 
-after_success: if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ ! -z "$TRAVIS_TAG" ] ; then echo $TRAVIS_TAG | sed 's/\-[0-9]*\.[0-9]*\.[0-9]*//g' | xargs -I {} ./gradlew {}:bintrayUpload; fi
+after_success: if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ ! -z "$TRAVIS_TAG" ] ; then echo $TRAVIS_TAG | sed 's/\-[0-9]*\.[0-9]*\.[0-9]*//g' | xargs -I {} ./gradlew {}:bintrayUpload; elif [ -z "$TRAVIS_TAG" ] ; then ./gradlew jacocoTestReport; bash <(curl -s https://codecov.io/bash); fi
+

@@ -3,6 +3,8 @@ package engineering.clientside.bitnodes;
 import java.util.Iterator;
 import java.util.ServiceLoader;
 
+import feign.Feign;
+
 final class BitnodesCoderProvider {
 
   private BitnodesCoderProvider() {}
@@ -22,5 +24,13 @@ final class BitnodesCoderProvider {
       }
     }
     return coder;
+  }
+
+  static Feign.Builder configureCoder(final Feign.Builder feignBuilder) {
+    final BitnodesCoder coder = getCoder();
+    if (coder != null) {
+      feignBuilder.decoder(coder).encoder(coder);
+    }
+    return feignBuilder;
   }
 }

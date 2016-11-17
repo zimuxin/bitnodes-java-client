@@ -33,8 +33,7 @@ public interface HystrixBitnodes extends Bitnodes {
 
   static HystrixBitnodes create(final HystrixFeign.Builder feignBuilder,
       final String apiUrl) {
-    final HystrixCommandProperties.Setter commandProperties = HystrixCommandProperties
-        .Setter()
+    final HystrixCommandProperties.Setter commandProperties = HystrixCommandProperties.Setter()
         .withExecutionTimeoutInMilliseconds(7000);
     return create(feignBuilder, Bitnodes.API_URL, commandProperties);
   }
@@ -42,20 +41,12 @@ public interface HystrixBitnodes extends Bitnodes {
   static HystrixBitnodes create(final HystrixFeign.Builder feignBuilder,
       final String apiUrl, final HystrixCommandProperties.Setter commandProperties) {
     final HystrixCommandGroupKey groupKey = HystrixCommandGroupKey.Factory.asKey(apiUrl);
-    final SetterFactory commandKeyIsRequestLine = (target, method) -> {
-      final String commandKey = Feign.configKey(target.type(), method);
-      return HystrixCommand.Setter
-          .withGroupKey(groupKey)
-          .andCommandKey(HystrixCommandKey.Factory.asKey(commandKey))
-          .andCommandPropertiesDefaults(commandProperties);
-    };
-    final BitnodesCoder coder = Bitnodes.getCoder();
-    if (coder != null) {
-      feignBuilder.decoder(coder).encoder(coder);
-    }
-    return feignBuilder
-        .setterFactory(commandKeyIsRequestLine)
-        .target(HystrixBitnodes.class, apiUrl);
+    final SetterFactory commandKeyIsRequestLine = (target, method) -> HystrixCommand.Setter
+        .withGroupKey(groupKey)
+        .andCommandKey(HystrixCommandKey.Factory.asKey(Feign.configKey(target.type(), method)))
+        .andCommandPropertiesDefaults(commandProperties);
+    return Bitnodes.create(feignBuilder
+        .setterFactory(commandKeyIsRequestLine), HystrixBitnodes.class, apiUrl);
   }
 
   @RequestLine(BASE_GET_PATH + "snapshots/")
