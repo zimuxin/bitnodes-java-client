@@ -76,7 +76,7 @@ InetAddress[] ipv6Nodes = client.getIPV6SeededNodeRecords();
 
 ## Developer Builds
 
-This is primarily a Java project, however, the compilation dependency on `com.dslplatform:dsl-json-processor` requires [Mono](http://www.mono-project.com/).  The Docker image [comodal/alpine-jdk-mono](https://hub.docker.com/r/comodal/alpine-jdk-mono/) can be used so that you do not have to install Mono.
+The compilation dependency on `com.dslplatform:dsl-json-processor` requires [Mono](http://www.mono-project.com/).  The Docker image [comodal/alpine-jdk-mono](https://hub.docker.com/r/comodal/alpine-jdk-mono/) can be used so that you do not have to install Mono.
 
 ### Docker Compile Example
 ```sh
@@ -85,7 +85,7 @@ This is primarily a Java project, however, the compilation dependency on `com.ds
  -v $(pwd):/bitnodes/\
  -w /bitnodes\
  comodal/alpine-jdk-mono:latest sh
- 
+
 /bitnodes > ./gradlew compileJava
 Starting a Gradle Daemon
 ...

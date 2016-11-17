@@ -11,7 +11,7 @@ final class BitnodesCoderProvider {
 
   static BitnodesCoder getCoder() {
     if (coder == null) {
-      synchronized (Bitnodes.API_URL) {
+      synchronized (BitnodesCoderProvider.class) {
         if (coder == null) {
           final ServiceLoader coderLoader = ServiceLoader.load(BitnodesCoder.class);
           final Iterator<BitnodesCoder> coders = coderLoader.iterator();

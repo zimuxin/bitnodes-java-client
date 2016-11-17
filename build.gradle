@@ -17,7 +17,7 @@ subprojects {
   apply plugin: 'maven-publish'
   apply plugin: 'pl.allegro.tech.build.axion-release'
   apply plugin: 'com.jfrog.bintray'
-  // apply plugin: 'findbugs'
+  apply plugin: 'findbugs'
   apply plugin: 'checkstyle'
   apply plugin: 'jacoco'
 
@@ -44,26 +44,26 @@ subprojects {
   targetCompatibility = JavaVersion.VERSION_1_8
 
   repositories {
-    maven { url "/Users/james/.m2/repository/" }
     maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     jcenter()
+    maven { url "/Users/james/.m2/repository/" }
   }
 
-  //  findbugs {
-  //    toolVersion = "+"
-  //    reportsDir = file("$project.buildDir/findbugs")
-  //    effort = "max"
-  //    reportLevel = "low"
-  //    ignoreFailures = false
-  //    excludeFilter = file("${parent.projectDir}/findbugs-exclude.xml")
-  //  }
-  //
-  //  tasks.withType(FindBugs) {
-  //    reports {
-  //      xml.enabled = false
-  //      html.enabled = true
-  //    }
-  //  }
+  findbugs {
+    toolVersion = "+"
+    reportsDir = file("$project.buildDir/findbugs")
+    effort = "max"
+    reportLevel = "low"
+    ignoreFailures = false
+    excludeFilter = file("${parent.projectDir}/findbugs-exclude.xml")
+  }
+
+  tasks.withType(FindBugs) {
+    reports {
+      xml.enabled = false
+      html.enabled = true
+    }
+  }
 
   checkstyle {
     config = resources.text.fromFile("${parent.projectDir}/checkstyle/google-checks.xml")
