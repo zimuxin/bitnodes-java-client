@@ -1,22 +1,19 @@
-package engineering.clientside.bitnodes.dslplatform;
+package engineering.clientside.bitnodes;
 
 import com.dslplatform.json.CompiledJson;
 import com.dslplatform.json.JsonAttribute;
 
 import java.util.List;
 
-import engineering.clientside.bitnodes.BitnodesLeaderboard;
-import engineering.clientside.bitnodes.BitnodesPeerIndexData;
-
 @CompiledJson
-public final class DslPlatformBitnodesLeaderboard extends DslPlatformBitnodesPage implements
-    BitnodesLeaderboard {
+public final class DslJsonBitnodesSnapshots extends DslJsonBitnodesPage implements
+    BitnodesSnapshots {
 
   @JsonAttribute(nullable = false)
-  public List<DslPlatformBitnodesPeerIndexData> results;
+  public List<DslJsonBitnodesSnapshot> results;
 
   @Override
-  public List<? extends BitnodesPeerIndexData> getResults() {
+  public List<? extends BitnodesSnapshot> getResults() {
     return results;
   }
 
@@ -25,10 +22,10 @@ public final class DslPlatformBitnodesLeaderboard extends DslPlatformBitnodesPag
     if (this == obj) {
       return true;
     }
-    if (obj == null || !(obj instanceof BitnodesLeaderboard)) {
+    if (obj == null || !(obj instanceof BitnodesSnapshots)) {
       return false;
     }
-    final BitnodesLeaderboard that = (BitnodesLeaderboard) obj;
+    final BitnodesSnapshots that = (BitnodesSnapshots) obj;
     if (count != that.getCount()) {
       return false;
     }
@@ -52,7 +49,7 @@ public final class DslPlatformBitnodesLeaderboard extends DslPlatformBitnodesPag
 
   @Override
   public String toString() {
-    return "BitnodesLeaderboard{count=" + count
+    return "BitnodesSnapshots{count=" + count
         + ", next='" + next + '\''
         + ", previous='" + previous + '\''
         + ", results=" + results + '}';

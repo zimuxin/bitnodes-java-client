@@ -1,11 +1,10 @@
-package engineering.clientside.bitnodes.dslplatform;
+package engineering.clientside.bitnodes;
 
 import com.dslplatform.json.CompiledJson;
 import com.dslplatform.json.JsonAttribute;
-import engineering.clientside.bitnodes.BitnodesStampedLatency;
 
 @CompiledJson
-public final class DslPlatformBitnodesStampedLatency implements BitnodesStampedLatency {
+public final class DslJsonBitnodesStampedLatency implements BitnodesStampedLatency {
 
   @JsonAttribute(name = "t", nullable = false)
   public long timestamp;

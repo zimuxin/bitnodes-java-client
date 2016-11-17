@@ -1,13 +1,11 @@
-package engineering.clientside.bitnodes.dslplatform;
+package engineering.clientside.bitnodes;
 
-import engineering.clientside.bitnodes.BitnodesInvArrivalStamp;
-
-final class DslPlatformBitnodesInvArrivalStamp implements BitnodesInvArrivalStamp {
+final class DslJsonBitnodesInvArrivalStamp implements BitnodesInvArrivalStamp {
 
   private final String address;
   private final long timestamp;
 
-  DslPlatformBitnodesInvArrivalStamp(final String address, final long timestamp) {
+  DslJsonBitnodesInvArrivalStamp(final String address, final long timestamp) {
     this.address = address;
     this.timestamp = timestamp;
   }

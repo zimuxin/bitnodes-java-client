@@ -1,4 +1,4 @@
-package engineering.clientside.bitnodes.dslplatform;
+package engineering.clientside.bitnodes;
 
 import com.dslplatform.json.JsonReader;
 
@@ -7,9 +7,9 @@ import java.util.logging.Logger;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-abstract class DslPlatformBaseConverter {
+abstract class DslJsonBaseConverter {
 
-  static final Logger LOG = Logger.getLogger(DslPlatformBaseConverter.class.getName());
+  static final Logger LOG = Logger.getLogger(DslJsonBaseConverter.class.getName());
 
   static void advancePosition(final JsonReader reader) throws IOException {
     final byte nextToken = reader.getNextToken();

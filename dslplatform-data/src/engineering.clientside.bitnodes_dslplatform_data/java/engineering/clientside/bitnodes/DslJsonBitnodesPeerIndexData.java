@@ -1,11 +1,10 @@
-package engineering.clientside.bitnodes.dslplatform;
+package engineering.clientside.bitnodes;
 
 import com.dslplatform.json.CompiledJson;
 import com.dslplatform.json.JsonAttribute;
-import engineering.clientside.bitnodes.BitnodesPeerIndexData;
 
 @CompiledJson
-public final class DslPlatformBitnodesPeerIndexData implements BitnodesPeerIndexData {
+public final class DslJsonBitnodesPeerIndexData implements BitnodesPeerIndexData {
 
   @JsonAttribute(nullable = false)
   public String node;

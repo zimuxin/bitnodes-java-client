@@ -1,11 +1,10 @@
-package engineering.clientside.bitnodes.dslplatform;
+package engineering.clientside.bitnodes;
 
 import com.dslplatform.json.CompiledJson;
 import com.dslplatform.json.JsonAttribute;
-import engineering.clientside.bitnodes.BitnodesInvArrivalStats;
 
 @CompiledJson
-public final class DslPlatformBitnodesInvArrivalStats implements BitnodesInvArrivalStats {
+public final class DslJsonBitnodesInvArrivalStats implements BitnodesInvArrivalStats {
 
   @JsonAttribute(name = "std", nullable = false)
   public int stdDev;

@@ -1,11 +1,10 @@
-package engineering.clientside.bitnodes.dslplatform;
+package engineering.clientside.bitnodes;
 
 import com.dslplatform.json.CompiledJson;
 import com.dslplatform.json.JsonAttribute;
-import engineering.clientside.bitnodes.BitnodesSnapshot;
 
 @CompiledJson
-public final class DslPlatformBitnodesSnapshot implements BitnodesSnapshot {
+public final class DslJsonBitnodesSnapshot implements BitnodesSnapshot {
 
   @JsonAttribute(nullable = false)
   public String url;
@@ -15,7 +14,7 @@ public final class DslPlatformBitnodesSnapshot implements BitnodesSnapshot {
   @JsonAttribute(name = "latest_height", nullable = false)
   public long latestHeight;
 
-  public DslPlatformBitnodesSnapshot() {}
+  public DslJsonBitnodesSnapshot() {}
 
   @Override
   public String getUrl() {

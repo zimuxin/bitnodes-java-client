@@ -26,10 +26,7 @@ public final class BitnodesFactory {
 
   public static Bitnodes create(final Feign.Builder feignBuilder, final String apiUrl,
       final int permitsPerSecond) {
-    final Bitnodes delegate = feignBuilder
-        .decoder(BitnodesCoder.get())
-        .target(Bitnodes.class, apiUrl);
-    return create(delegate, permitsPerSecond);
+    return create(Bitnodes.create(feignBuilder, apiUrl), permitsPerSecond);
   }
 
   public static Bitnodes create(final Bitnodes delegate) {

@@ -3,7 +3,7 @@ package engineering.clientside.bitnodes;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -28,12 +28,12 @@ public class BitnodesClientTest {
   private static final String API_URL = "http://localhost:" + API_PORT;
 
   @Rule
-  public WireMockRule wireMockRule = new WireMockRule(API_PORT);
+  public final WireMockRule wireMockRule = new WireMockRule(API_PORT);
 
-  private Bitnodes client = null;
+  private static Bitnodes client = null;
 
-  @Before
-  public void createClient() {
+  @BeforeClass
+  public static void createClient() {
     client = BitnodesFactory.create(Feign.builder(), API_URL, 32);
   }
 

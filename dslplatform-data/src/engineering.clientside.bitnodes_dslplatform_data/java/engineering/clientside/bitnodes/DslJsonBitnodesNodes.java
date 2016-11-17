@@ -1,18 +1,15 @@
-package engineering.clientside.bitnodes.dslplatform;
-
-import engineering.clientside.bitnodes.BitnodesNode;
-import engineering.clientside.bitnodes.BitnodesNodes;
+package engineering.clientside.bitnodes;
 
 import java.util.Map;
 
-final class DslPlatformBitnodesNodes implements BitnodesNodes {
+final class DslJsonBitnodesNodes implements BitnodesNodes {
 
   private final long timestamp;
   private final int totalNodes;
   private final long latestHeight;
   private final Map<String, BitnodesNode> nodes;
 
-  DslPlatformBitnodesNodes(final long timestamp, final int totalNodes, final long latestHeight,
+  DslJsonBitnodesNodes(final long timestamp, final int totalNodes, final long latestHeight,
       final Map<String, BitnodesNode> nodes) {
     this.timestamp = timestamp;
     this.totalNodes = totalNodes;

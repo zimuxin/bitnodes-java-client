@@ -1,8 +1,6 @@
-package engineering.clientside.bitnodes.dslplatform;
+package engineering.clientside.bitnodes;
 
-import engineering.clientside.bitnodes.BitnodesNode;
-
-final class DslPlatformBitnodesNode implements BitnodesNode {
+final class DslJsonBitnodesNode implements BitnodesNode {
 
   private final long protocolVersion;
   private final String userAgent;
@@ -18,7 +16,7 @@ final class DslPlatformBitnodesNode implements BitnodesNode {
   private final String asn;
   private final String organizationName;
 
-  DslPlatformBitnodesNode(final long protocolVersion, final String userAgent,
+  DslJsonBitnodesNode(final long protocolVersion, final String userAgent,
       final long connectedSince, final long services, final long height, final String hostname,
       final String city, final String countryCode, final double latitude, final double longitude,
       final String timezone, final String asn, final String organizationName) {

@@ -1,12 +1,10 @@
-package engineering.clientside.bitnodes.dslplatform;
+package engineering.clientside.bitnodes;
 
 import com.dslplatform.json.CompiledJson;
 import com.dslplatform.json.JsonAttribute;
-import engineering.clientside.bitnodes.BitnodesNode;
-import engineering.clientside.bitnodes.BitnodesNodeStatus;
 
 @CompiledJson
-public final class DslPlatformBitnodesNodeStatus implements BitnodesNodeStatus {
+public final class DslJsonBitnodesNodeStatus implements BitnodesNodeStatus {
 
   @JsonAttribute(nullable = false)
   public String hostname;

@@ -1,15 +1,12 @@
-package engineering.clientside.bitnodes.dslplatform;
+package engineering.clientside.bitnodes;
 
 import com.dslplatform.json.CompiledJson;
 import com.dslplatform.json.JsonAttribute;
 
 import java.util.List;
 
-import engineering.clientside.bitnodes.BitnodesInvArrivalStamp;
-import engineering.clientside.bitnodes.BitnodesInvPropagation;
-
 @CompiledJson
-public final class DslPlatformBitnodesInvPropagation implements BitnodesInvPropagation {
+public final class DslJsonBitnodesInvPropagation implements BitnodesInvPropagation {
 
   @JsonAttribute(name = "inv_hash", nullable = false)
   public String invHash;
@@ -27,7 +24,7 @@ public final class DslPlatformBitnodesInvPropagation implements BitnodesInvPropa
   }
 
   @Override
-  public DslPlatformBitnodesInvArrivalStats getInvArrivalStats() {
+  public DslJsonBitnodesInvArrivalStats getInvArrivalStats() {
     return stats.invArrivalStats;
   }
 
@@ -37,7 +34,7 @@ public final class DslPlatformBitnodesInvPropagation implements BitnodesInvPropa
     @JsonAttribute(name = "head", nullable = false)
     public List<BitnodesInvArrivalStamp> headInvArrival;
     @JsonAttribute(name = "stats", nullable = false)
-    public DslPlatformBitnodesInvArrivalStats invArrivalStats;
+    public DslJsonBitnodesInvArrivalStats invArrivalStats;
   }
 
   @Override

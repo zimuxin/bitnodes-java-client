@@ -7,6 +7,7 @@ import java.net.UnknownHostException;
 import java.util.List;
 
 import feign.Body;
+import feign.Feign;
 import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
@@ -20,6 +21,26 @@ public interface Bitnodes {
   String BASE_POST_PATH = "POST " + BASE_API_PATH;
   String DNS_SEED_URL = "seed.bitnodes.io";
   int DEFAULT_NODE_PORT = 8333;
+
+  static Bitnodes create() {
+    return create(Feign.builder(), Bitnodes.API_URL);
+  }
+
+  static Bitnodes create(final Feign.Builder feignBuilder) {
+    return create(feignBuilder, Bitnodes.API_URL);
+  }
+
+  static Bitnodes create(final Feign.Builder feignBuilder, final String apiUrl) {
+    final BitnodesCoder coder = getCoder();
+    if (coder != null) {
+      feignBuilder.decoder(coder).encoder(coder);
+    }
+    return feignBuilder.target(Bitnodes.class, apiUrl);
+  }
+
+  static BitnodesCoder getCoder() {
+    return BitnodesCoderProvider.getCoder();
+  }
 
   @RequestLine(BASE_GET_PATH + "snapshots/?limit={limit}&page={page}")
   BitnodesSnapshots getSnapshots(@Param("limit") final int limit, @Param("page") final int page);

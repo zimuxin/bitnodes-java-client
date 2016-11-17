@@ -36,7 +36,7 @@ public class DecodeBitnodesJsonTest {
       .headers(Collections.emptyMap())
       .build();
 
-  private static final BitnodesCoder coder = BitnodesCoder.get();
+  private static final BitnodesCoder coder = Bitnodes.getCoder();
 
   @Test
   public void decodeSnapshotsJson() throws IOException {

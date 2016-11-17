@@ -40,8 +40,8 @@ subprojects {
   project.group = 'engineering.clientside'
   project.version = scmVersion.version
 
-  sourceCompatibility = JavaVersion.VERSION_1_9
-  targetCompatibility = JavaVersion.VERSION_1_9
+  sourceCompatibility = JavaVersion.VERSION_1_8
+  targetCompatibility = JavaVersion.VERSION_1_8
 
   repositories {
     maven { url "/Users/james/.m2/repository/" }
@@ -183,6 +183,9 @@ project(':bitnodes-java-dslplatform-data') {
       java {
         srcDir 'src/engineering.clientside.bitnodes_dslplatform_data/java'
       }
+      resources {
+        srcDir 'src/engineering.clientside.bitnodes_dslplatform_data/resources'
+      }
     }
   }
 }
@@ -204,6 +207,28 @@ project(':bitnodes-java-throttled-client') {
     main {
       java {
         srcDir 'src/engineering.clientside.bitnodes_throttled_client/java'
+      }
+    }
+  }
+}
+
+project(':bitnodes-java-hystrix-client') {
+  dependencies {
+    compile project(':bitnodes-java-api')
+    compile project(':bitnodes-java-dslplatform-data')
+    compile('io.github.openfeign:feign-hystrix:+') {
+      exclude group: 'org.jvnet', module: 'animal-sniffer-annotation'
+    }
+    compile 'com.netflix.hystrix:hystrix-core:+'
+
+    testCompile 'junit:junit:+'
+    testCompile "com.github.tomakehurst:wiremock:+"
+  }
+
+  sourceSets {
+    main {
+      java {
+        srcDir 'src/engineering.clientside.bitnodes_hystrix_client/java'
       }
     }
   }

@@ -1,28 +1,26 @@
-package engineering.clientside.bitnodes.dslplatform;
+package engineering.clientside.bitnodes;
 
 import com.dslplatform.json.CompiledJson;
 import com.dslplatform.json.JsonAttribute;
 
 import java.util.List;
 
-import engineering.clientside.bitnodes.BitnodesNodeLatency;
-
 @CompiledJson
-public final class DslPlatformBitnodesNodeLatency implements BitnodesNodeLatency {
+public final class DslJsonBitnodesNodeLatency implements BitnodesNodeLatency {
 
   @JsonAttribute(name = "daily_latency", nullable = false)
-  public List<DslPlatformBitnodesStampedLatency> dailyLatency;
+  public List<DslJsonBitnodesStampedLatency> dailyLatency;
 
   @JsonAttribute(name = "weekly_latency", nullable = false)
-  public List<DslPlatformBitnodesStampedLatency> weeklyLatency;
+  public List<DslJsonBitnodesStampedLatency> weeklyLatency;
 
   @Override
-  public List<DslPlatformBitnodesStampedLatency> getDailyLatency() {
+  public List<DslJsonBitnodesStampedLatency> getDailyLatency() {
     return dailyLatency;
   }
 
   @Override
-  public List<DslPlatformBitnodesStampedLatency> getWeeklyLatency() {
+  public List<DslJsonBitnodesStampedLatency> getWeeklyLatency() {
     return weeklyLatency;
   }
 

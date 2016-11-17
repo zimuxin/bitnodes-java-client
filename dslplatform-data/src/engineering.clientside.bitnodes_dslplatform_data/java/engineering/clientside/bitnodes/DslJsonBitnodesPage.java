@@ -1,6 +1,6 @@
-package engineering.clientside.bitnodes.dslplatform;
+package engineering.clientside.bitnodes;
 
-public abstract class DslPlatformBitnodesPage {
+public abstract class DslJsonBitnodesPage {
 
   public int count;
   public String next;

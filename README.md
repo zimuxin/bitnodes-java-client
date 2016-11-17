@@ -70,22 +70,23 @@ InetAddress[] ipv6Nodes = client.getIPV6SeededNodeRecords();
 +--- com.fabahaba:throttle
 ```
 
-*  [![:bitnodes-java-api:](https://api.bintray.com/packages/client-side/clients/bitnodes-java-api/images/download.svg) ](https://bintray.com/client-side/clients/bitnodes-java-api/_latestVersion)
-*  [![:bitnodes-java-dslplatform-data:](https://api.bintray.com/packages/client-side/clients/bitnodes-java-dslplatform-data/images/download.svg) ](https://bintray.com/client-side/clients/bitnodes-java-dslplatform-data/_latestVersion)
-*  [![:bitnodes-java-throttled-client:](https://api.bintray.com/packages/client-side/clients/bitnodes-java-throttled-client/images/download.svg) ](https://bintray.com/client-side/clients/bitnodes-java-throttled-client/_latestVersion)
+* [![:bitnodes-java-throttled-client:](https://api.bintray.com/packages/client-side/clients/bitnodes-java-throttled-client/images/download.svg) ](https://bintray.com/client-side/clients/bitnodes-java-throttled-client/_latestVersion)
+  * [![:bitnodes-java-api:](https://api.bintray.com/packages/client-side/clients/bitnodes-java-api/images/download.svg) ](https://bintray.com/client-side/clients/bitnodes-java-api/_latestVersion)
+  * [![:bitnodes-java-dslplatform-data:](https://api.bintray.com/packages/client-side/clients/bitnodes-java-dslplatform-data/images/download.svg) ](https://bintray.com/client-side/clients/bitnodes-java-dslplatform-data/_latestVersion)
 
 ## Developer Builds
 
-This is primarily a Java project, however, the dependency on `com.dslplatform:dsl-json` requires [Mono](http://www.mono-project.com/) to compile.  The Docker image [comodal/alpine-jdk-mono](https://hub.docker.com/r/comodal/alpine-jdk-mono/) can be used so that you do not have to install Mono.
+This is primarily a Java project, however, the compilation dependency on `com.dslplatform:dsl-json-processor` requires [Mono](http://www.mono-project.com/).  The Docker image [comodal/alpine-jdk-mono](https://hub.docker.com/r/comodal/alpine-jdk-mono/) can be used so that you do not have to install Mono.
 
 ### Docker Compile Example
 ```sh
-user ~/git/bitnodes-java-client > docker run --rm -it \
-  -v $GRADLE_USER_HOME:/root/.gradle \
-  -v $(pwd):/bitnodes/ \
-  -w /bitnodes \
-  comodal/alpine-jdk-mono:latest sh
-root /bitnodes > ./gradlew compileJava
+~/git/bitnodes-java-client > docker run --rm -it\
+ -v $GRADLE_USER_HOME:/root/.gradle\
+ -v $(pwd):/bitnodes/\
+ -w /bitnodes\
+ comodal/alpine-jdk-mono:latest sh
+ 
+/bitnodes > ./gradlew compileJava
 Starting a Gradle Daemon
 ...
 ```

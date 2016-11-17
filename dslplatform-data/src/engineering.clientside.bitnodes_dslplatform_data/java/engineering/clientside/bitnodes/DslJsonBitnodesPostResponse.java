@@ -1,10 +1,9 @@
-package engineering.clientside.bitnodes.dslplatform;
+package engineering.clientside.bitnodes;
 
 import com.dslplatform.json.CompiledJson;
-import engineering.clientside.bitnodes.BitnodesPostResponse;
 
 @CompiledJson
-public final class DslPlatformBitnodesPostResponse implements BitnodesPostResponse {
+public final class DslJsonBitnodesPostResponse implements BitnodesPostResponse {
 
   public boolean success;
 
