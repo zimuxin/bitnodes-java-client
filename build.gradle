@@ -36,6 +36,9 @@ subprojects {
       }
       pushTagsOnly = true
     }
+    checks {
+      snapshotDependencies = false
+    }
   }
 
   project.group = 'engineering.clientside'
