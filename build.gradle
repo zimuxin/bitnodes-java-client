@@ -173,7 +173,7 @@ project(':bitnodes-java-api') {
   }
 }
 
-project(':bitnodes-java-dslplatform-data') {
+project(':bitnodes-java-dslplatform-model') {
   dependencies {
     compile project(':bitnodes-java-api')
     compileOnly 'com.dslplatform:dsl-json-processor:+'
@@ -185,10 +185,10 @@ project(':bitnodes-java-dslplatform-data') {
   sourceSets {
     main {
       java {
-        srcDir 'src/engineering.clientside.bitnodes_dslplatform_data/java'
+        srcDir 'src/engineering.clientside.bitnodes_dslplatform_model/java'
       }
       resources {
-        srcDir 'src/engineering.clientside.bitnodes_dslplatform_data/resources'
+        srcDir 'src/engineering.clientside.bitnodes_dslplatform_model/resources'
       }
     }
   }
@@ -197,7 +197,7 @@ project(':bitnodes-java-dslplatform-data') {
 project(':bitnodes-java-throttle-client') {
   dependencies {
     compile project(':bitnodes-java-api')
-    compile project(':bitnodes-java-dslplatform-data')
+    compile project(':bitnodes-java-dslplatform-model')
     compile 'engineering.clientside:completable-feign:+'
     compile 'engineering.clientside:throttle:+'
 
