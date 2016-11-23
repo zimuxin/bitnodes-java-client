@@ -176,22 +176,24 @@ project(':bitnodes-java-api') {
   }
 }
 
-project(':bitnodes-java-dslplatform-model') {
+project(':bitnodes-java-dsljson-model') {
   dependencies {
     compile project(':bitnodes-java-api')
     compileOnly 'com.dslplatform:dsl-json-processor:+'
     compile 'com.dslplatform:dsl-json:+'
 
     testCompile 'junit:junit:+'
+    testCompile 'nl.jqno.equalsverifier:equalsverifier:+'
+
   }
 
   sourceSets {
     main {
       java {
-        srcDir 'src/engineering.clientside.bitnodes_dslplatform_model/java'
+        srcDir 'src/engineering.clientside.bitnodes_dsljson_model/java'
       }
       resources {
-        srcDir 'src/engineering.clientside.bitnodes_dslplatform_model/resources'
+        srcDir 'src/engineering.clientside.bitnodes_dsljson_model/resources'
       }
     }
   }
@@ -200,7 +202,7 @@ project(':bitnodes-java-dslplatform-model') {
 project(':bitnodes-java-throttle-client') {
   dependencies {
     compile project(':bitnodes-java-api')
-    compile project(':bitnodes-java-dslplatform-model')
+    compile project(':bitnodes-java-dsljson-model')
     compile 'engineering.clientside:completable-feign:+'
     compile 'engineering.clientside:throttle:+'
 
@@ -211,7 +213,7 @@ project(':bitnodes-java-throttle-client') {
   sourceSets {
     main {
       java {
-        srcDir 'src/engineering.clientside.bitnodes_throttled_client/java'
+        srcDir 'src/engineering.clientside.bitnodes_throttle_client/java'
       }
     }
   }

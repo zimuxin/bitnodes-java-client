@@ -46,6 +46,7 @@ public class BitnodesClientTest {
             .withBodyFile("BitnodesSnapshots.json")));
 
     final int numSnapshots = 7;
+    System.out.println(client.test(27));
     final BitnodesSnapshots snapshotsPage = client.getSnapshots(numSnapshots, 2);
     assertEquals(60356, snapshotsPage.getCount());
     assertEquals("https://bitnodes.21.co/api/v1/snapshots/?limit=7",

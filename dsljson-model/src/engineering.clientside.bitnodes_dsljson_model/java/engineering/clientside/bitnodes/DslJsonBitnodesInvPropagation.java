@@ -1,0 +1,84 @@
+package engineering.clientside.bitnodes;
+
+import com.dslplatform.json.CompiledJson;
+import com.dslplatform.json.JsonAttribute;
+
+import java.util.List;
+
+@CompiledJson
+public final class DslJsonBitnodesInvPropagation implements BitnodesInvPropagation {
+
+  @JsonAttribute(name = "inv_hash", nullable = false)
+  public String invHash;
+  @JsonAttribute(nullable = false)
+  public NestedStats stats;
+
+  @Override
+  public String getInvHash() {
+    return invHash;
+  }
+
+  @Override
+  public List<BitnodesInvArrivalStamp> getHeadInvArrival() {
+    return stats.headInvArrival;
+  }
+
+  @Override
+  public DslJsonBitnodesInvArrivalStats getInvArrivalStats() {
+    return stats.invArrivalStats;
+  }
+
+  @CompiledJson
+  public static final class NestedStats {
+
+    @JsonAttribute(name = "head", nullable = false)
+    public List<BitnodesInvArrivalStamp> headInvArrival;
+    @JsonAttribute(name = "stats", nullable = false)
+    public DslJsonBitnodesInvArrivalStats invArrivalStats;
+
+    @Override
+    public boolean equals(final Object obj) {
+      if (this == obj) {
+        return true;
+      }
+      if (obj == null || getClass() != obj.getClass()) {
+        return false;
+      }
+      final NestedStats that = (NestedStats) obj;
+      if (!headInvArrival.equals(that.headInvArrival)) {
+        return false;
+      }
+      return invArrivalStats.equals(that.invArrivalStats);
+    }
+
+    @Override
+    public int hashCode() {
+      int result = headInvArrival.hashCode();
+      result = 31 * result + invArrivalStats.hashCode();
+      return result;
+    }
+  }
+
+  @Override
+  public boolean equals(final Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null || !(obj instanceof BitnodesInvPropagation)) {
+      return false;
+    }
+    final BitnodesInvPropagation that = (BitnodesInvPropagation) obj;
+    if (!invHash.equals(that.getInvHash())) {
+      return false;
+    }
+    return stats.headInvArrival.equals(that.getHeadInvArrival())
+        && stats.invArrivalStats.equals(that.getInvArrivalStats());
+  }
+
+  @Override
+  public int hashCode() {
+    int result = invHash.hashCode();
+    result = 31 * result + stats.hashCode();
+    return result;
+  }
+}

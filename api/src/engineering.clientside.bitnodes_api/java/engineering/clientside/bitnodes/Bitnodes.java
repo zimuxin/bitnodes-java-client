@@ -47,6 +47,10 @@ public interface Bitnodes {
     return BitnodesCoderProvider.configureCoder(feignBuilder).target(apiType, apiUrl);
   }
 
+  default double test(final double val) {
+    return Math.sqrt(val);
+  }
+
   @RequestLine(BASE_GET_PATH + "snapshots/?limit={limit}&page={page}")
   BitnodesSnapshots getSnapshots(@Param("limit") final int limit, @Param("page") final int page);
 
