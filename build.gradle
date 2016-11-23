@@ -31,8 +31,9 @@ subprojects {
       prefix = project.name
     }
     repository {
-      customUsername = "$AXION_RELEASE_GITHUB_TOKEN"
-      customPassword = ""
+      if (project.hasProperty("AXION_RELEASE_GITHUB_TOKEN")) {
+        customUsername = "$AXION_RELEASE_GITHUB_TOKEN"
+      }
       pushTagsOnly = true
     }
   }
@@ -46,12 +47,12 @@ subprojects {
   repositories {
     maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     jcenter()
-    maven { url "/Users/james/.m2/repository/" }
+    mavenCentral()
   }
 
   findbugs {
     toolVersion = "+"
-    reportsDir = file("$project.buildDir/findbugs")
+    reportsDir = file("${buildDir}/findbugs")
     effort = "max"
     reportLevel = "low"
     ignoreFailures = false
@@ -68,7 +69,7 @@ subprojects {
   checkstyle {
     config = resources.text.fromFile("${parent.projectDir}/checkstyle/google-checks.xml")
     configProperties = [samedir: "${parent.projectDir}/checkstyle"]
-    reportsDir = file("$project.buildDir/checkstyleReports")
+    reportsDir = file("${buildDir}/checkstyleReports")
     toolVersion = "+"
     ignoreFailures = false
   }
@@ -80,7 +81,7 @@ subprojects {
   jacocoTestReport {
     reports {
       xml.enabled = true
-      html.enabled = false
+      html.enabled = true
     }
     afterEvaluate {
       classDirectories = files(classDirectories.files.collect {
@@ -197,10 +198,8 @@ project(':bitnodes-java-throttle-client') {
   dependencies {
     compile project(':bitnodes-java-api')
     compile project(':bitnodes-java-dslplatform-data')
-    compile('io.github.openfeign:feign-core:+') {
-      exclude group: 'org.jvnet', module: 'animal-sniffer-annotation'
-    }
-    compile 'com.fabahaba:throttle:+'
+    compile 'engineering.clientside:completable-feign:+'
+    compile 'engineering.clientside:throttle:+'
 
     testCompile 'junit:junit:+'
     testCompile "com.github.tomakehurst:wiremock:+"
@@ -210,28 +209,6 @@ project(':bitnodes-java-throttle-client') {
     main {
       java {
         srcDir 'src/engineering.clientside.bitnodes_throttled_client/java'
-      }
-    }
-  }
-}
-
-project(':bitnodes-java-hystrix-client') {
-  dependencies {
-    compile project(':bitnodes-java-api')
-    compile project(':bitnodes-java-dslplatform-data')
-    compile('io.github.openfeign:feign-hystrix:+') {
-      exclude group: 'org.jvnet', module: 'animal-sniffer-annotation'
-    }
-    compile 'com.netflix.hystrix:hystrix-core:+'
-
-    testCompile 'junit:junit:+'
-    testCompile "com.github.tomakehurst:wiremock:+"
-  }
-
-  sourceSets {
-    main {
-      java {
-        srcDir 'src/engineering.clientside.bitnodes_hystrix_client/java'
       }
     }
   }

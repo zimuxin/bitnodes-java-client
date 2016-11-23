@@ -1,39 +1,40 @@
 package engineering.clientside.bitnodes;
 
-import com.fabahaba.throttle.Throttle;
-
-import feign.Feign;
+import engineering.clientside.feign.completable.CompletableFeign;
+import engineering.clientside.throttle.Throttle;
 
 public final class BitnodesFactory {
 
   private BitnodesFactory() {}
 
-  public static Bitnodes create() {
-    return create(Feign.builder());
+  public static AsyncBitnodes create() {
+    return create(CompletableFeign.builder());
   }
 
-  public static Bitnodes create(final Feign.Builder feignBuilder) {
+  public static AsyncBitnodes create(final CompletableFeign.Builder feignBuilder) {
     return create(feignBuilder, Bitnodes.API_URL, 1);
   }
 
-  public static Bitnodes create(final int permitsPerSecond) {
-    return create(Feign.builder(), permitsPerSecond);
+  public static AsyncBitnodes create(final int permitsPerSecond) {
+    return create(CompletableFeign.builder(), permitsPerSecond);
   }
 
-  public static Bitnodes create(final Feign.Builder feignBuilder, final int permitsPerSecond) {
+  public static AsyncBitnodes create(final CompletableFeign.Builder feignBuilder,
+      final int permitsPerSecond) {
     return create(feignBuilder, Bitnodes.API_URL, permitsPerSecond);
   }
 
-  public static Bitnodes create(final Feign.Builder feignBuilder, final String apiUrl,
+  public static AsyncBitnodes create(final CompletableFeign.Builder feignBuilder,
+      final String apiUrl,
       final int permitsPerSecond) {
-    return create(Bitnodes.create(feignBuilder, apiUrl), permitsPerSecond);
+    return create(AsyncBitnodes.createAsync(feignBuilder, apiUrl), permitsPerSecond);
   }
 
-  public static Bitnodes create(final Bitnodes delegate) {
+  public static AsyncBitnodes create(final AsyncBitnodes delegate) {
     return create(delegate, 1);
   }
 
-  public static Bitnodes create(final Bitnodes delegate, final int permitsPerSecond) {
+  public static AsyncBitnodes create(final AsyncBitnodes delegate, final int permitsPerSecond) {
     return new BitnodesClient(delegate, Throttle.create(permitsPerSecond));
   }
 }

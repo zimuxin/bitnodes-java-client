@@ -106,7 +106,10 @@ public interface Bitnodes {
   BitnodesInvPropagation getInvPropagation(@Param("invHash") final String invHash);
 
   @RequestLine(BASE_POST_PATH + "nodes/{address}-{port}/")
-  @Headers("Content-Type: application/x-www-form-urlencoded")
+  @Headers({
+               "Content-type: application/x-www-form-urlencoded",
+               "Accept: application/json",
+           })
   @Body("bitcoin_address={bitcoin_address}&url={url}")
   BitnodesPostResponse postNodeBitcoinAddress(@Param("bitcoin_address") final String bitcoinAddress,
       @Param("url") final String url, @Param("address") final String address,
@@ -118,7 +121,10 @@ public interface Bitnodes {
   }
 
   @RequestLine(BASE_POST_PATH + "nodes/{address}-{port}/")
-  @Headers("Content-Type: application/x-www-form-urlencoded")
+  @Headers({
+               "Content-type: application/x-www-form-urlencoded",
+               "Accept: application/json",
+           })
   @Body("bitcoin_address={bitcoin_address}")
   BitnodesPostResponse postNodeBitcoinAddress(@Param("bitcoin_address") final String bitcoinAddress,
       @Param("address") final String address, @Param("port") final int port);

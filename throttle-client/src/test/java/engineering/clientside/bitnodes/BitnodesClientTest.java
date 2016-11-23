@@ -2,7 +2,6 @@ package engineering.clientside.bitnodes;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -11,7 +10,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
 
-import feign.Feign;
+import engineering.clientside.feign.completable.CompletableFeign;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
@@ -30,11 +29,11 @@ public class BitnodesClientTest {
   @Rule
   public final WireMockRule wireMockRule = new WireMockRule(API_PORT);
 
-  private static Bitnodes client = null;
+  private static AsyncBitnodes client = null;
 
   @BeforeClass
   public static void createClient() {
-    client = BitnodesFactory.create(Feign.builder(), API_URL, 32);
+    client = BitnodesFactory.create(CompletableFeign.builder(), API_URL, 32);
   }
 
   @Test
@@ -61,6 +60,8 @@ public class BitnodesClientTest {
     assertEquals(1479098506L, snapshot.getTimestamp());
     assertEquals(5334, snapshot.getTotalNodes());
     assertEquals(438807L, snapshot.getLatestHeight());
+
+    assertEquals(snapshotsPage, client.getSnapshotsFuture(numSnapshots, 2).join());
   }
 
   @Test
@@ -94,6 +95,8 @@ public class BitnodesClientTest {
     assertEquals("America/Los_Angeles", node.getTimezone());
     assertEquals("AS62838", node.getAsn());
     assertEquals("Reprise Hosting", node.getOrganizationName());
+
+    assertEquals(nodes, client.getNodesFuture(snapshotTimestamp).join());
   }
 
   @Test
@@ -129,6 +132,8 @@ public class BitnodesClientTest {
     assertEquals("America/Los_Angeles", node.getTimezone());
     assertEquals("AS15003", node.getAsn());
     assertEquals("Nobis Technology Group, LLC", node.getOrganizationName());
+
+    assertEquals(nodeStatus, client.getNodeStatusFuture(nodeAddress).join());
   }
 
   @Test
@@ -160,6 +165,8 @@ public class BitnodesClientTest {
     stampedLatency = weeklyLatency.get(weeklyLatency.size() - 1);
     assertEquals(1479135600L, stampedLatency.getTimestamp());
     assertEquals(104, stampedLatency.getLatency());
+
+    assertEquals(nodeLatency, client.getNodeLatencyFuture(nodeAddress).join());
   }
 
   @Test
@@ -196,6 +203,8 @@ public class BitnodesClientTest {
     assertEquals(1.0, peerIndexData.getBlockIndex(), 0.0);
     assertEquals(9.1122, peerIndexData.getPeerIndex(), 0.0);
     assertEquals(13, peerIndexData.getRank());
+
+    assertEquals(leaderboard, client.getLeaderboardFuture(5, 3).join());
   }
 
   @Test
@@ -224,6 +233,8 @@ public class BitnodesClientTest {
     assertEquals(1.0, peerIndexData.getBlockIndex(), 0.0);
     assertEquals(9.1122, peerIndexData.getPeerIndex(), 0.0);
     assertEquals(13, peerIndexData.getRank());
+
+    assertEquals(peerIndexData, client.getNodeRankingFuture(nodeAddress).join());
   }
 
   @Test
@@ -255,6 +266,8 @@ public class BitnodesClientTest {
     assertEquals(417, arrivalStats.getFiftiethPercentile());
     assertEquals(814, arrivalStats.getNinetiethPercentile());
     assertEquals(453, arrivalStats.getMean());
+
+    assertEquals(invPropagation, client.getInvPropagationFuture(invHash).join());
   }
 
   @Test
@@ -275,6 +288,9 @@ public class BitnodesClientTest {
 
     final BitnodesPostResponse postResponse = client.postNodeBitcoinAddress(bitcoinAddress, url,
         nodeAddress);
-    Assert.assertTrue(postResponse.isSuccess());
+    assertTrue(postResponse.isSuccess());
+
+    assertEquals(postResponse, client.postNodeBitcoinAddressFuture(bitcoinAddress, url,
+        nodeAddress).join());
   }
 }

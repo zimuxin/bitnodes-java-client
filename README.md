@@ -1,56 +1,28 @@
 # [Bitnodes](https://bitnodes.21.co/api/) Java Client [![Build Status](https://travis-ci.org/client-side/bitnodes-java-client.svg?branch=master)](https://travis-ci.org/client-side/bitnodes-java-client) [![:bitnodes-java-api:](https://api.bintray.com/packages/client-side/clients/bitnodes-java-api/images/download.svg) ](https://bintray.com/client-side/clients/bitnodes-java-api/_latestVersion) [![License](http://img.shields.io/badge/license-Apache--2-blue.svg?style=flat) ](http://www.apache.org/licenses/LICENSE-2.0)
 
-## [Throttle](https://github.com/jamespedwards42/throttle) Client [![:bitnodes-java-throttle-client:](https://api.bintray.com/packages/client-side/clients/bitnodes-java-throttled-client/images/download.svg) ](https://bintray.com/client-side/clients/bitnodes-java-throttled-client/_latestVersion)
+## [Throttle](https://github.com/client-side/throttle) Asynchronous Client [![:bitnodes-java-throttle-client:](https://api.bintray.com/packages/client-side/clients/bitnodes-java-throttled-client/images/download.svg) ](https://bintray.com/client-side/clients/bitnodes-java-throttled-client/_latestVersion)
 
 ```java
-int permistPerSecond = 2;
-Bitnodes client = BitnodesFactory.create(permistPerSecond);
+int permitsPerSecond = 2;
+AsyncBitnodes client = BitnodesFactory.create(permitsPerSecond);
 ```
 
 ```
-\ engineering.clientside:bitnodes-java-throttled-client:
-+--- project :bitnodes-java-api:
-|    \--- io.github.openfeign:feign-core:
-+--- project :bitnodes-java-dslplatform-data:
-|    +--- project :bitnodes-java-api: (*)
-|    \--- com.dslplatform:dsl-json:
-+--- io.github.openfeign:feign-core:
-+--- com.fabahaba:throttle:
-```
-
-## [Hystrix](https://github.com/Netflix/Hystrix) Client [![:bitnodes-java-hystrix-client:](https://api.bintray.com/packages/client-side/clients/bitnodes-java-hystrix-client/images/download.svg) ](https://bintray.com/client-side/clients/bitnodes-java-hystrix-client/_latestVersion)
-
-```java
-HystrixCommandProperties.Setter commandProperties = HystrixCommandProperties
-  .Setter()
-  .withExecutionTimeoutEnabled(true)
-  .withExecutionTimeoutInMilliseconds(7000);
-Bitnodes client = HystrixBitnodes.create(commandProperties);
-```
-
-```
-\ engineering.clientside:bitnodes-java-hystrix-client:
-+--- project :bitnodes-java-api:
-|    \--- io.github.openfeign:feign-core:
-+--- project :bitnodes-java-dslplatform-data:
-|    +--- project :bitnodes-java-api: (*)
-|    \--- com.dslplatform:dsl-json:
-+--- io.github.openfeign:feign-hystrix:
-|    +--- io.github.openfeign:feign-core:
-|    \--- com.netflix.hystrix:hystrix-core:
-|         +--- org.slf4j:slf4j-api:
-|         +--- com.netflix.archaius:archaius-core:
-|         |    +--- commons-configuration:commons-configuration:
-|         |    |    +--- commons-lang:commons-lang:
-|         |    |    \--- commons-logging:commons-logging:
-|         |    \--- org.slf4j:slf4j-api:
-|         +--- io.reactivex:rxjava:
-|         \--- org.hdrhistogram:HdrHistogram:
-\--- com.netflix.hystrix:hystrix-core: (*)
+\ engineering.clientside:bitnodes-java-throttled-client:+
++--- project :bitnodes-java-api
+|    \--- io.github.openfeign:feign-core:+
++--- project :bitnodes-java-dslplatform-data
+|    +--- project :bitnodes-java-api (*)
+|    \--- com.dslplatform:dsl-json:+
++--- engineering.clientside:completable-feign:+
+|    \--- io.github.openfeign:feign-core:+
+\--- engineering.clientside:throttle:+
 ```
 
 ## API Methods
 
+All methods listed below have a corresponding `CompletableFuture<T>` asynchronous method under the [AsyncBitnodes](api/src/engineering.clientside.bitnodes_api/java/engineering/clientside/bitnodes/AsyncBitnodes.java#L13) API.
+ 
 ### [List Snapshots](https://bitnodes.21.co/api/#list-snapshots) & [Nodes](https://bitnodes.21.co/api/#list-nodes)
 ```java
 BitnodesSnapshots snapshotsPage = client.getSnapshots();

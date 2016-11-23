@@ -20,11 +20,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-public class DecodeBitnodesJsonTest {
+public class BitnodesCoderTest {
 
   private static String readResource(final String name) {
     try (final BufferedReader buffer = new BufferedReader(new InputStreamReader(
-        DecodeBitnodesJsonTest.class.getResourceAsStream(name), UTF_8))) {
+        BitnodesCoderTest.class.getResourceAsStream(name), UTF_8))) {
       return buffer.lines().collect(Collectors.joining());
     } catch (final IOException e) {
       throw new UncheckedIOException(e);

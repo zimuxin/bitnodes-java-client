@@ -9,28 +9,19 @@ final class BitnodesCoderProvider {
 
   private BitnodesCoderProvider() {}
 
-  private static volatile BitnodesCoder coder = null;
+  private static final BitnodesCoder coder = loadCoder();
+
+  private static BitnodesCoder loadCoder() {
+    final ServiceLoader coderLoader = ServiceLoader.load(BitnodesCoder.class);
+    final Iterator<BitnodesCoder> coders = coderLoader.iterator();
+    return coders.hasNext() ? coders.next() : null;
+  }
 
   static BitnodesCoder getCoder() {
-    if (coder == null) {
-      synchronized (BitnodesCoderProvider.class) {
-        if (coder == null) {
-          final ServiceLoader coderLoader = ServiceLoader.load(BitnodesCoder.class);
-          final Iterator<BitnodesCoder> coders = coderLoader.iterator();
-          if (coders.hasNext()) {
-            coder = coders.next();
-          }
-        }
-      }
-    }
     return coder;
   }
 
   static Feign.Builder configureCoder(final Feign.Builder feignBuilder) {
-    final BitnodesCoder coder = getCoder();
-    if (coder != null) {
-      feignBuilder.decoder(coder).encoder(coder);
-    }
-    return feignBuilder;
+    return coder == null ? feignBuilder : feignBuilder.decoder(coder).encoder(coder);
   }
 }

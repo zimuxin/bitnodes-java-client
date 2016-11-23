@@ -1,23 +1,26 @@
 package engineering.clientside.bitnodes;
 
-import com.fabahaba.throttle.Throttle;
+import java.net.InetAddress;
+import java.util.concurrent.CompletableFuture;
 
-final class BitnodesClient implements Bitnodes {
+import engineering.clientside.throttle.Throttle;
 
-  private final Bitnodes delegate;
+final class BitnodesClient implements AsyncBitnodes {
+
+  private final AsyncBitnodes delegate;
   private final Throttle throttle;
 
-  BitnodesClient(final Bitnodes delegate, final Throttle throttle) {
+  BitnodesClient(final AsyncBitnodes delegate, final Throttle throttle) {
     this.delegate = delegate;
     this.throttle = throttle;
   }
 
-  private Bitnodes getDelegate() {
-    return getClient(1);
+  private AsyncBitnodes getDelegate() {
+    return getDelegate(1);
   }
 
-  private Bitnodes getClient(final int permits) {
-    throttle.acquire(permits);
+  private AsyncBitnodes getDelegate(final int permits) {
+    throttle.acquireUnchecked(permits);
     return delegate;
   }
 
@@ -86,5 +89,106 @@ final class BitnodesClient implements Bitnodes {
   public BitnodesPostResponse postNodeBitcoinAddress(final String bitcoinAddress,
       final String address, final int port) {
     return getDelegate().postNodeBitcoinAddress(bitcoinAddress, address, port);
+  }
+
+  @Override
+  public InetAddress[] getSeededNodeRecords() {
+    return getDelegate().getSeededNodeRecords();
+  }
+
+  @Override
+  public InetAddress[] getIPV6SeededNodeRecords() {
+    return getDelegate().getIPV6SeededNodeRecords();
+  }
+
+  @Override
+  public InetAddress[] getIPV4SeededNodeRecords() {
+    return getDelegate().getIPV4SeededNodeRecords();
+  }
+
+  @Override
+  public InetAddress[] getSeededNodeRecords(final long servicesFilter) {
+    return getDelegate().getSeededNodeRecords(servicesFilter);
+  }
+
+  @Override
+  public InetAddress[] getIPV6SeededNodeRecords(final long servicesFilter) {
+    return getDelegate().getIPV6SeededNodeRecords(servicesFilter);
+  }
+
+  @Override
+  public InetAddress[] getIPV4SeededNodeRecords(final long servicesFilter) {
+    return getDelegate().getIPV4SeededNodeRecords(servicesFilter);
+  }
+
+  @Override
+  public CompletableFuture<BitnodesSnapshots> getSnapshotsFuture(final int limit, final int page) {
+    return getDelegate().getSnapshotsFuture(limit, page);
+  }
+
+  @Override
+  public CompletableFuture<BitnodesSnapshots> getSnapshotsFuture(final int limit) {
+    return getDelegate().getSnapshotsFuture(limit);
+  }
+
+  @Override
+  public CompletableFuture<BitnodesSnapshots> getSnapshotsFuture() {
+    return getDelegate().getSnapshotsFuture();
+  }
+
+  @Override
+  public CompletableFuture<BitnodesNodes> getNodesFuture(final long snapshotTimestamp) {
+    return getDelegate().getNodesFuture(snapshotTimestamp);
+  }
+
+  @Override
+  public CompletableFuture<BitnodesNodeStatus> getNodeStatusFuture(final String address,
+      final int port) {
+    return getDelegate().getNodeStatusFuture(address, port);
+  }
+
+  @Override
+  public CompletableFuture<BitnodesNodeLatency> getNodeLatencyFuture(final String address,
+      final int port) {
+    return getDelegate().getNodeLatencyFuture(address, port);
+  }
+
+  @Override
+  public CompletableFuture<BitnodesLeaderboard> getLeaderboardFuture(final int limit,
+      final int page) {
+    return getDelegate().getLeaderboardFuture(limit, page);
+  }
+
+  @Override
+  public CompletableFuture<BitnodesLeaderboard> getLeaderboardFuture(final int limit) {
+    return getDelegate().getLeaderboardFuture(limit);
+  }
+
+  @Override
+  public CompletableFuture<BitnodesLeaderboard> getLeaderboardFuture() {
+    return getDelegate().getLeaderboardFuture();
+  }
+
+  @Override
+  public CompletableFuture<BitnodesPeerIndexData> getNodeRankingFuture(final String address,
+      final int port) {
+    return getDelegate().getNodeRankingFuture(address, port);
+  }
+
+  @Override
+  public CompletableFuture<BitnodesInvPropagation> getInvPropagationFuture(final String invHash) {
+    return getDelegate().getInvPropagationFuture(invHash);
+  }
+
+  @Override
+  public CompletableFuture<BitnodesPostResponse> postNodeBitcoinAddressFuture(
+      final String bitcoinAddress, final String url, final String address, final int port) {
+    return getDelegate().postNodeBitcoinAddressFuture(bitcoinAddress, url, address, port);
+  }
+
+  @Override
+  public CompletableFuture<BitnodesPostResponse> postNodeBitcoinAddressFuture(
+      final String bitcoinAddress, final String address, final int port) {
+    return getDelegate().postNodeBitcoinAddressFuture(bitcoinAddress, address, port);
   }
 }
