@@ -1,5 +1,8 @@
-# [Bitnodes](https://bitnodes.21.co/api/) Java Client [![Build Status](https://travis-ci.org/client-side/bitnodes-java-client.svg?branch=master)](https://travis-ci.org/client-side/bitnodes-java-client) [![:bitnodes-java-api:](https://api.bintray.com/packages/client-side/clients/bitnodes-java-api/images/download.svg) ](https://bintray.com/client-side/clients/bitnodes-java-api/_latestVersion) [![License](http://img.shields.io/badge/license-Apache--2-blue.svg?style=flat) ](http://www.apache.org/licenses/LICENSE-2.0)
+# [Bitnodes](https://bitnodes.21.co/api/) Java Client [![Build Status](https://travis-ci.org/client-side/bitnodes-java-client.svg?branch=master)](https://travis-ci.org/client-side/bitnodes-java-client)  [![License](http://img.shields.io/badge/license-Apache--2-blue.svg?style=flat) ](http://www.apache.org/licenses/LICENSE-2.0)
 
+## [Bitnodes API](api/src/engineering.clientside.bitnodes_api/java/engineering/clientside/bitnodes/Bitnodes.java#L16) [![:bitnodes-java-api:](https://api.bintray.com/packages/client-side/clients/bitnodes-java-api/images/download.svg) ](https://bintray.com/client-side/clients/bitnodes-java-api/_latestVersion)
+## Bitnodes [DSL Platform JSON](https://github.com/ngs-doo/dsl-json) Model [![:bitnodes-java-dslplatform-model:](https://api.bintray.com/packages/client-side/clients/bitnodes-java-dslplatform-model/images/download.svg) ](https://bintray.com/client-side/clients/bitnodes-java-dslplatform-model/_latestVersion)
+  
 ## [Throttle](https://github.com/client-side/throttle) Asynchronous Client [![:bitnodes-java-throttle-client:](https://api.bintray.com/packages/client-side/clients/bitnodes-java-throttled-client/images/download.svg) ](https://bintray.com/client-side/clients/bitnodes-java-throttled-client/_latestVersion)
 
 ```java
@@ -11,7 +14,7 @@ AsyncBitnodes client = BitnodesFactory.create(permitsPerSecond);
 \ engineering.clientside:bitnodes-java-throttled-client:+
 +--- project :bitnodes-java-api
 |    \--- io.github.openfeign:feign-core:+
-+--- project :bitnodes-java-dslplatform-data
++--- project :bitnodes-java-dslplatform-model
 |    +--- project :bitnodes-java-api (*)
 |    \--- com.dslplatform:dsl-json:+
 +--- engineering.clientside:completable-feign:+
