@@ -13,21 +13,12 @@ import feign.RequestLine;
 public interface AsyncBitnodes extends Bitnodes {
 
   static AsyncBitnodes createAsync(final Feign.Builder feignBuilder) {
-    return createAsync(feignBuilder, Bitnodes.API_URL);
+    return createAsync(feignBuilder, AsyncBitnodes.class);
   }
 
   static <T extends AsyncBitnodes> T createAsync(final Feign.Builder feignBuilder,
       final Class<T> apiType) {
-    return createAsync(feignBuilder, apiType, Bitnodes.API_URL);
-  }
-
-  static AsyncBitnodes createAsync(final Feign.Builder feignBuilder, final String apiUrl) {
-    return createAsync(feignBuilder, AsyncBitnodes.class, apiUrl);
-  }
-
-  static <T extends AsyncBitnodes> T createAsync(final Feign.Builder feignBuilder,
-      final Class<T> apiType, final String apiUrl) {
-    return BitnodesCoderProvider.configureCoder(feignBuilder).target(apiType, apiUrl);
+    return BitnodesCoderProvider.configureCoder(feignBuilder).target(apiType, API_URL);
   }
 
   @RequestLine(BASE_GET_PATH + "snapshots/?limit={limit}&page={page}")

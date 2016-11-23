@@ -10,8 +10,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
 
-import engineering.clientside.feign.completable.CompletableFeign;
-
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
@@ -24,7 +22,6 @@ import static org.junit.Assert.assertEquals;
 public class BitnodesClientTest {
 
   private static final int API_PORT = 8021;
-  private static final String API_URL = "http://localhost:" + API_PORT;
 
   @Rule
   public final WireMockRule wireMockRule = new WireMockRule(API_PORT);
@@ -33,7 +30,9 @@ public class BitnodesClientTest {
 
   @BeforeClass
   public static void createClient() {
-    client = BitnodesFactory.create(CompletableFeign.builder(), API_URL, 32);
+    System.setProperty(BitnodesConfig.API_URL.getPropName(), "http://localhost:" + API_PORT);
+    System.setProperty(ThrottleBitnodesConfig.DEFAULT_REQUESTS_PER_SECOND.getPropName(), "1");
+    client = BitnodesFactory.create();
   }
 
   @Test
@@ -46,7 +45,6 @@ public class BitnodesClientTest {
             .withBodyFile("BitnodesSnapshots.json")));
 
     final int numSnapshots = 7;
-    System.out.println(client.test(27));
     final BitnodesSnapshots snapshotsPage = client.getSnapshots(numSnapshots, 2);
     assertEquals(60356, snapshotsPage.getCount());
     assertEquals("https://bitnodes.21.co/api/v1/snapshots/?limit=7",

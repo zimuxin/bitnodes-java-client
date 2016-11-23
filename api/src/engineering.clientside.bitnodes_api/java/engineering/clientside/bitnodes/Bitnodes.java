@@ -5,6 +5,7 @@ import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
+import java.util.Optional;
 
 import feign.Body;
 import feign.Feign;
@@ -15,40 +16,31 @@ import feign.RequestLine;
 @Headers("Accept: application/json")
 public interface Bitnodes {
 
-  String API_URL = "https://bitnodes.21.co";
+  String API_URL = System.getProperty(BitnodesConfig.API_URL.getPropName(),
+      "https://bitnodes.21.co");
   String BASE_API_PATH = "/api/v1/";
   String BASE_GET_PATH = "GET " + BASE_API_PATH;
   String BASE_POST_PATH = "POST " + BASE_API_PATH;
-  String DNS_SEED_URL = "seed.bitnodes.io";
-  int DEFAULT_NODE_PORT = 8333;
+  String DNS_SEED_URL = System.getProperty(BitnodesConfig.DNS_SEED_URL.getPropName(),
+      "seed.bitnodes.io");
+  int DEFAULT_NODE_PORT = Optional
+      .ofNullable(System.getProperty(BitnodesConfig.DEFAULT_NODE_PORT.getPropName()))
+      .map(Integer::parseInt).orElse(8333);
 
   static Bitnodes create() {
-    return create(Feign.builder(), Bitnodes.API_URL);
+    return create(Feign.builder());
   }
 
   static <T extends Bitnodes> T create(final Class<T> apiType) {
-    return create(Feign.builder(), apiType, Bitnodes.API_URL);
+    return create(Feign.builder(), apiType);
   }
 
   static Bitnodes create(final Feign.Builder feignBuilder) {
-    return create(feignBuilder, Bitnodes.API_URL);
+    return create(feignBuilder, Bitnodes.class);
   }
 
   static <T extends Bitnodes> T create(final Feign.Builder feignBuilder, final Class<T> apiType) {
-    return create(feignBuilder, apiType, Bitnodes.API_URL);
-  }
-
-  static Bitnodes create(final Feign.Builder feignBuilder, final String apiUrl) {
-    return create(feignBuilder, Bitnodes.class, apiUrl);
-  }
-
-  static <T extends Bitnodes> T create(final Feign.Builder feignBuilder, final Class<T> apiType,
-      final String apiUrl) {
-    return BitnodesCoderProvider.configureCoder(feignBuilder).target(apiType, apiUrl);
-  }
-
-  default double test(final double val) {
-    return Math.sqrt(val);
+    return BitnodesCoderProvider.configureCoder(feignBuilder).target(apiType, API_URL);
   }
 
   @RequestLine(BASE_GET_PATH + "snapshots/?limit={limit}&page={page}")
