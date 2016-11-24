@@ -1,0 +1,37 @@
+{
+  "timestamp": 1418442876,
+  "latest_height": 334083,
+  "unexpected": "ignored",
+  "nodes": {
+    "148.251.238.178:8333": [
+      70002,
+      "/Satoshi:0.9.2.1/",
+      1418186362,
+      1,
+      334083,
+      null,
+      null,
+      null,
+      51.0,
+      9.0,
+      null,
+      null,
+      null
+    ],
+    "208.118.235.153:8333": [
+      70001,
+      "/Satoshi:0.8.1/",
+      1418440191,
+      1,
+      334083,
+      "bitcoin.fsf.org",
+      "Boston",
+      "US",
+      42.3584,
+      -71.0598,
+      "America/New_York",
+      "AS22989",
+      "Free Software Foundation, Inc."
+    ]
+  }
+}

@@ -31,8 +31,13 @@ public class BitnodesClientTest {
   @BeforeClass
   public static void createClient() {
     System.setProperty(BitnodesConfig.API_URL.getPropName(), "http://localhost:" + API_PORT);
-    System.setProperty(ThrottleBitnodesConfig.DEFAULT_REQUESTS_PER_SECOND.getPropName(), "1");
+    System.setProperty(ThrottleBitnodesConfig.DEFAULT_REQUESTS_PER_SECOND.getPropName(), "32");
     client = BitnodesFactory.create();
+  }
+
+  @Test
+  public void testOtherFactoryMethods() {
+    BitnodesFactory.create(1);
   }
 
   @Test

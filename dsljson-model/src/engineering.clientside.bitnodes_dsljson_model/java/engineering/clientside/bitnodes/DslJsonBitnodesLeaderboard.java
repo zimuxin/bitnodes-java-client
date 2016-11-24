@@ -35,7 +35,7 @@ public final class DslJsonBitnodesLeaderboard extends DslJsonBitnodesPage implem
     if (previous != null ? !previous.equals(that.getPrevious()) : that.getPrevious() != null) {
       return false;
     }
-    return results.equals(that.getResults());
+    return results != null ? results.equals(that.getResults()) : that.getResults() == null;
   }
 
   @Override
@@ -43,7 +43,7 @@ public final class DslJsonBitnodesLeaderboard extends DslJsonBitnodesPage implem
     int result = count;
     result = 31 * result + (next != null ? next.hashCode() : 0);
     result = 31 * result + (previous != null ? previous.hashCode() : 0);
-    result = 31 * result + results.hashCode();
+    result = 31 * result + (results != null ? results.hashCode() : 0);
     return result;
   }
 }

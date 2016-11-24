@@ -40,13 +40,12 @@ public abstract class BitnodeNodeConverter extends DslJsonBaseConverter {
   };
 
   public static final JsonReader.ReadObject<BitnodesNode> JSON_READER = reader -> {
-    // https://getaddr.bitnodes.io/api/
-    // [70002, "/Satoshi:0.9.3/", 1420041581, 1, 197491, "73.168.37.76", null, "US",
-    // 38.0, -97.0, null, "AS7922", "Comcast Cable Communications, Inc."]
+    // [70002, "/Satoshi:0.9.3/", 1420041581, 1, 197491, "73.168.37.76", null, "US", 38.0, -97.0,
+    // null, "AS7922", "Comcast Cable Communications, Inc."]
     reader.getNextToken();
     final long protocolVersion = NumberConverter.deserializeLong(reader);
     advancePosition(reader);
-    final String userAgent = reader.wasNull() ? null : reader.readString();
+    final String userAgent = reader.readString();
     advancePosition(reader);
     final long connectedSince = NumberConverter.deserializeLong(reader);
     advancePosition(reader);

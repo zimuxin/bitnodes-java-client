@@ -3,7 +3,9 @@ package engineering.clientside.bitnodes;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,6 +26,9 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class BitnodesCoderTest {
+
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
 
   private static String readResource(final String name) {
     try (final BufferedReader buffer = new BufferedReader(new InputStreamReader(
@@ -51,7 +56,7 @@ public class BitnodesCoderTest {
     EqualsVerifier.forClass(DslJsonBitnodesInvPropagation.class)
         .suppress(Warning.NULL_FIELDS, Warning.NONFINAL_FIELDS).verify();
     EqualsVerifier.forClass(DslJsonBitnodesLeaderboard.class)
-        .suppress(Warning.NULL_FIELDS, Warning.NONFINAL_FIELDS).verify();
+        .suppress(Warning.NONFINAL_FIELDS).verify();
     EqualsVerifier.forClass(DslJsonBitnodesPeerIndexData.class)
         .suppress(Warning.NULL_FIELDS, Warning.NONFINAL_FIELDS).verify();
     EqualsVerifier.forClass(DslJsonBitnodesNodeLatency.class)
@@ -65,7 +70,7 @@ public class BitnodesCoderTest {
     EqualsVerifier.forClass(DslJsonBitnodesSnapshot.class)
         .suppress(Warning.NULL_FIELDS, Warning.NONFINAL_FIELDS).verify();
     EqualsVerifier.forClass(DslJsonBitnodesSnapshots.class)
-        .suppress(Warning.NULL_FIELDS, Warning.NONFINAL_FIELDS).verify();
+        .suppress(Warning.NONFINAL_FIELDS).verify();
     EqualsVerifier.forClass(DslJsonBitnodesStampedLatency.class)
         .suppress(Warning.NONFINAL_FIELDS).verify();
   }
@@ -97,6 +102,15 @@ public class BitnodesCoderTest {
     coder.encode(snapshots, snapshots.getClass(), template);
     final Response recodedResponse = PROTOTYPE_RESPONSE.toBuilder().body(template.body()).build();
     assertEquals(snapshots, coder.decode(recodedResponse, BitnodesSnapshots.class));
+  }
+
+  @Test
+  public void decodeMissingFieldNodesJson() throws IOException {
+    thrown.expect(IOException.class);
+    thrown.expectMessage("Missing field 'total_nodes' in BitnodesNodes response.");
+    final String json = readResource("/MissingFieldBitnodesNodes.json");
+    final Response response = PROTOTYPE_RESPONSE.toBuilder().body(json, UTF_8).build();
+    coder.decode(response, BitnodesNodes.class);
   }
 
   @Test

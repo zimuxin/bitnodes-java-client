@@ -92,6 +92,7 @@ public abstract class BitnodeNodesConverter extends DslJsonBaseConverter {
             if (nextToken == '}') {
               break;
             }
+            throw createUnexpectedTokenException(reader, nextToken);
           }
           break;
         default:
@@ -107,7 +108,18 @@ public abstract class BitnodeNodesConverter extends DslJsonBaseConverter {
       }
       if (nextToken == '}') {
         if (timestamp == -1 || totalNodes == -1 || latestHeight == -1 || nodes == null) {
-          throw new IOException("Missing fields in BitnodesNodes response: " + reader);
+          String missing;
+          if (timestamp == -1) {
+            missing = "timestamp";
+          } else if (totalNodes == -1) {
+            missing = "total_nodes";
+          } else if (latestHeight == -1) {
+            missing = "latest_height";
+          } else {
+            missing = "nodes";
+          }
+          throw new IOException(String.format(
+              "Missing field '%s' in BitnodesNodes response.", missing));
         }
         return new DslJsonBitnodesNodes(timestamp, totalNodes, latestHeight, nodes);
       }

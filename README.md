@@ -1,4 +1,4 @@
-# [Bitnodes](https://bitnodes.21.co/api/) Java Client [![Build Status](https://travis-ci.org/client-side/bitnodes-java-client.svg?branch=master)](https://travis-ci.org/client-side/bitnodes-java-client)  [![License](http://img.shields.io/badge/license-Apache--2-blue.svg?style=flat) ](http://www.apache.org/licenses/LICENSE-2.0)
+# [Bitnodes](https://bitnodes.21.co/api/) Java Client [![Build Status](https://travis-ci.org/client-side/bitnodes-java-client.svg?branch=master)](https://travis-ci.org/client-side/bitnodes-java-client)  [![License](http://img.shields.io/badge/license-Apache--2-blue.svg?style=flat) ](http://www.apache.org/licenses/LICENSE-2.0) [![codecov](https://codecov.io/gh/client-side/bitnodes-java-client/branch/master/graph/badge.svg)](https://codecov.io/gh/client-side/bitnodes-java-client)
 
 ## [Throttle](https://github.com/client-side/throttle) Async Client [![:bitnodes-java-throttle-client:](https://api.bintray.com/packages/client-side/clients/bitnodes-java-throttle-client/images/download.svg) ](https://bintray.com/client-side/clients/bitnodes-java-throttle-client/_latestVersion)
 

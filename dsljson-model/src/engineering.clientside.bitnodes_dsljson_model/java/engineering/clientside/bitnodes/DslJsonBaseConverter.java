@@ -14,8 +14,7 @@ abstract class DslJsonBaseConverter {
   static void advancePosition(final JsonReader reader) throws IOException {
     final byte nextToken = reader.getNextToken();
     if (nextToken != ',') {
-      throw new IOException(String.format("Unexpected token '%c' at position %d in %s.",
-          nextToken, reader.getCurrentIndex(), reader.toString()));
+      throw createUnexpectedTokenException(reader, nextToken);
     }
     reader.getNextToken();
   }
@@ -27,5 +26,10 @@ abstract class DslJsonBaseConverter {
       hash *= 0x1000193;
     }
     return (int) hash;
+  }
+
+  static IOException createUnexpectedTokenException(final JsonReader reader, final byte token) {
+    return new IOException(String.format("Unexpected token '%c' at position %d in %s.",
+        token, reader.getCurrentIndex(), reader.toString()));
   }
 }
