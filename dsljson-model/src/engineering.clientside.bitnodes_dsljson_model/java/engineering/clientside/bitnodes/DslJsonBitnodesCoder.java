@@ -43,7 +43,7 @@ public final class DslJsonBitnodesCoder implements BitnodesCoder {
 
   private static final ThreadLocal<byte[]> buffer = ThreadLocal.withInitial(() -> new byte[4_096]);
   private static final ThreadLocal<JsonWriter> writer = ThreadLocal
-      .withInitial(() -> new JsonWriter(buffer.get()));
+      .withInitial(() -> dslJson.newWriter());
 
   @Override
   public Object decode(final Response response, final Type type) throws IOException {
