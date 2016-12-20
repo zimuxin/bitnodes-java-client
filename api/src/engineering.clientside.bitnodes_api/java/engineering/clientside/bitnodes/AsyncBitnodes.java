@@ -5,21 +5,11 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import feign.Body;
-import feign.Feign;
 import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
 
 public interface AsyncBitnodes extends Bitnodes {
-
-  static AsyncBitnodes createAsync(final Feign.Builder feignBuilder) {
-    return createAsync(feignBuilder, AsyncBitnodes.class);
-  }
-
-  static <T extends AsyncBitnodes> T createAsync(final Feign.Builder feignBuilder,
-      final Class<T> apiType) {
-    return BitnodesCoderProvider.configureCoder(feignBuilder).target(apiType, API_URL);
-  }
 
   @RequestLine(BASE_GET_PATH + "snapshots/?limit={limit}&page={page}")
   CompletableFuture<BitnodesSnapshots> getSnapshotsFuture(@Param("limit") final int limit,

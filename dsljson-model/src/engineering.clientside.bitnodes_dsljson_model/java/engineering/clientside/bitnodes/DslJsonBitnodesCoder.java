@@ -5,7 +5,6 @@ import com.dslplatform.json.JsonWriter;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UncheckedIOException;
 import java.lang.reflect.Type;
 
 import feign.RequestTemplate;
@@ -43,13 +42,13 @@ public final class DslJsonBitnodesCoder implements BitnodesCoder {
 
   private static final ThreadLocal<byte[]> buffer = ThreadLocal.withInitial(() -> new byte[4_096]);
   private static final ThreadLocal<JsonWriter> writer = ThreadLocal
-      .withInitial(() -> new JsonWriter(buffer.get()));
+      .withInitial(() -> dslJson.newWriter());
 
   @Override
   public Object decode(final Response response, final Type type) throws IOException {
     final Response.Body body = response.body();
     if (body == null) {
-      throw new IOException("Empty response:" + response);
+      throw new IOException("Null response body.");
     }
     try (final InputStream is = body.asInputStream()) {
       return dslJson.deserialize(type, is, buffer.get());
@@ -61,10 +60,9 @@ public final class DslJsonBitnodesCoder implements BitnodesCoder {
       throws EncodeException {
     try (final JsonWriter localWriter = writer.get()) {
       dslJson.serialize(localWriter, object);
-      final byte[] body = localWriter.toByteArray();
-      template.body(body, UTF_8);
+      template.body(localWriter.toByteArray(), UTF_8);
     } catch (final IOException e) {
-      throw new UncheckedIOException(e);
+      throw new EncodeException("Failed to serialize object, see cause.", e);
     }
   }
 }

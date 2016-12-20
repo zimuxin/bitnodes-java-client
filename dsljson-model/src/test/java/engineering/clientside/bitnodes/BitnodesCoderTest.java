@@ -16,10 +16,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import engineering.clientside.feign.CoderProvider;
 import feign.RequestTemplate;
 import feign.Response;
+import feign.codec.EncodeException;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.hamcrest.CoreMatchers.isA;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
@@ -44,7 +47,23 @@ public class BitnodesCoderTest {
       .headers(Collections.emptyMap())
       .build();
 
-  private static final BitnodesCoder coder = BitnodesCoderProvider.getCoder();
+  private static final BitnodesCoder coder = CoderProvider.getCoder(BitnodesCoder.class);
+
+  @Test
+  public void testNullResponseBody() throws IOException {
+    thrown.expect(IOException.class);
+    thrown.expectMessage("Null response body.");
+    final Response response = PROTOTYPE_RESPONSE.toBuilder().build();
+    coder.decode(response, Object.class);
+  }
+
+  @Test
+  public void testEncodeIOException() {
+    thrown.expect(EncodeException.class);
+    thrown.expectMessage("Failed to serialize object, see cause.");
+    thrown.expectCause(isA(IOException.class));
+    coder.encode(coder, coder.getClass(), new RequestTemplate());
+  }
 
   @Test
   public void equalsContract() {

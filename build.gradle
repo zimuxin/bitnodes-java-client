@@ -184,7 +184,7 @@ project(':bitnodes-java-dsljson-model') {
 
     testCompile 'junit:junit:+'
     testCompile 'nl.jqno.equalsverifier:equalsverifier:+'
-
+    testCompile 'engineering.clientside:completable-feign:+'
   }
 
   sourceSets {

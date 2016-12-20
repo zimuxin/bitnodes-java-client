@@ -2,8 +2,10 @@ package engineering.clientside.bitnodes;
 
 import java.util.Optional;
 
+import engineering.clientside.feign.CoderProvider;
 import engineering.clientside.feign.completable.CompletableFeign;
 import engineering.clientside.throttle.Throttle;
+import feign.Feign;
 
 public final class BitnodesFactory {
 
@@ -29,6 +31,16 @@ public final class BitnodesFactory {
       final int permitsPerSecond) {
     final Throttle throttle = Throttle.create(permitsPerSecond);
     feignBuilder.requestInterceptor(template -> throttle.acquireUnchecked());
-    return AsyncBitnodes.createAsync(feignBuilder);
+    return createAsync(feignBuilder);
+  }
+
+  static AsyncBitnodes createAsync(final Feign.Builder feignBuilder) {
+    return createAsync(feignBuilder, AsyncBitnodes.class);
+  }
+
+  static <T extends AsyncBitnodes> T createAsync(final Feign.Builder feignBuilder,
+      final Class<T> apiType) {
+    return CoderProvider.configureCoder(feignBuilder, BitnodesCoder.class)
+        .target(apiType, Bitnodes.API_URL);
   }
 }

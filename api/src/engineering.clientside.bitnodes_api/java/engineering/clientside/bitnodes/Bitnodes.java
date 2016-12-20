@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 import feign.Body;
-import feign.Feign;
 import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
@@ -26,22 +25,6 @@ public interface Bitnodes {
   int DEFAULT_NODE_PORT = Optional
       .ofNullable(System.getProperty(BitnodesConfig.DEFAULT_NODE_PORT.getPropName()))
       .map(Integer::parseInt).orElse(8333);
-
-  static Bitnodes create() {
-    return create(Feign.builder());
-  }
-
-  static <T extends Bitnodes> T create(final Class<T> apiType) {
-    return create(Feign.builder(), apiType);
-  }
-
-  static Bitnodes create(final Feign.Builder feignBuilder) {
-    return create(feignBuilder, Bitnodes.class);
-  }
-
-  static <T extends Bitnodes> T create(final Feign.Builder feignBuilder, final Class<T> apiType) {
-    return BitnodesCoderProvider.configureCoder(feignBuilder).target(apiType, API_URL);
-  }
 
   @RequestLine(BASE_GET_PATH + "snapshots/?limit={limit}&page={page}")
   BitnodesSnapshots getSnapshots(@Param("limit") final int limit, @Param("page") final int page);
