@@ -207,7 +207,7 @@ project(':bitnodes-java-throttle-client') {
     compile 'engineering.clientside:throttle:+'
 
     testCompile 'junit:junit:+'
-    testCompile "com.github.tomakehurst:wiremock:+"
+    testCompile 'com.squareup.okhttp3:mockwebserver:+'
   }
 
   sourceSets {

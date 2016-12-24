@@ -1,36 +1,35 @@
 package engineering.clientside.bitnodes;
 
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
-
 import org.junit.BeforeClass;
-import org.junit.Rule;
+import org.junit.ClassRule;
 import org.junit.Test;
 
-import java.io.UnsupportedEncodingException;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URLEncoder;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
-import static com.github.tomakehurst.wiremock.client.WireMock.get;
-import static com.github.tomakehurst.wiremock.client.WireMock.post;
-import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 public class BitnodesClientTest {
 
-  private static final int API_PORT = 8021;
-
-  @Rule
-  public final WireMockRule wireMockRule = new WireMockRule(API_PORT);
+  @ClassRule
+  public static final MockWebServer server = new MockWebServer();
 
   private static AsyncBitnodes client = null;
 
   @BeforeClass
-  public static void createClient() {
-    System.setProperty(BitnodesConfig.API_URL.getPropName(), "http://localhost:" + API_PORT);
+  public static void before() {
+    System.setProperty(BitnodesConfig.API_URL.getPropName(),
+        "http://localhost:" + server.getPort());
     System.setProperty(ThrottleBitnodesConfig.DEFAULT_REQUESTS_PER_SECOND.getPropName(), "32");
     client = BitnodesFactory.create();
   }
@@ -41,13 +40,12 @@ public class BitnodesClientTest {
   }
 
   @Test
-  public void getSnapshots() {
-    stubFor(get(urlEqualTo("/api/v1/snapshots/?limit=7&page=2"))
-        .withHeader("Accept", equalTo("application/json"))
-        .willReturn(aResponse()
-            .withStatus(200)
-            .withHeader("Content-Type", "application/json")
-            .withBodyFile("BitnodesSnapshots.json")));
+  public void getSnapshots() throws IOException, InterruptedException, URISyntaxException {
+    final MockResponse response = new MockResponse()
+        .addHeader("Content-Type", "application/json")
+        .setBody(new String(Files.readAllBytes(Paths.get(BitnodesClientTest.class
+            .getResource("/BitnodesSnapshots.json").toURI())), UTF_8));
+    server.enqueue(response);
 
     final int numSnapshots = 7;
     final BitnodesSnapshots snapshotsPage = client.getSnapshots(numSnapshots, 2);
@@ -65,18 +63,23 @@ public class BitnodesClientTest {
     assertEquals(5334, snapshot.getTotalNodes());
     assertEquals(438807L, snapshot.getLatestHeight());
 
+    final RecordedRequest request = server.takeRequest();
+    assertEquals("application/json", request.getHeader("Accept"));
+    assertEquals("/api/v1/snapshots/?limit=7&page=2", request.getPath());
+
+    server.enqueue(response);
     assertEquals(snapshotsPage, client.getSnapshotsFuture(numSnapshots, 2).join());
+    server.takeRequest();
   }
 
   @Test
-  public void getNodes() {
+  public void getNodes() throws IOException, InterruptedException, URISyntaxException {
     final long snapshotTimestamp = 1479098506L;
-    stubFor(get(urlEqualTo("/api/v1/snapshots/" + snapshotTimestamp))
-        .withHeader("Accept", equalTo("application/json"))
-        .willReturn(aResponse()
-            .withStatus(200)
-            .withHeader("Content-Type", "application/json")
-            .withBodyFile("BitnodesNodes_1479098506.json")));
+    final MockResponse response = new MockResponse()
+        .addHeader("Content-Type", "application/json")
+        .setBody(new String(Files.readAllBytes(Paths.get(BitnodesClientTest.class
+            .getResource("/BitnodesNodes_1479098506.json").toURI())), UTF_8));
+    server.enqueue(response);
 
     final BitnodesNodes nodes = client.getNodes(snapshotTimestamp);
     assertEquals(1479098506L, nodes.getTimestamp());
@@ -100,19 +103,23 @@ public class BitnodesClientTest {
     assertEquals("AS62838", node.getAsn());
     assertEquals("Reprise Hosting", node.getOrganizationName());
 
+    final RecordedRequest request = server.takeRequest();
+    assertEquals("application/json", request.getHeader("Accept"));
+    assertEquals("/api/v1/snapshots/" + snapshotTimestamp, request.getPath());
+
+    server.enqueue(response);
     assertEquals(nodes, client.getNodesFuture(snapshotTimestamp).join());
+    server.takeRequest();
   }
 
   @Test
-  public void getNodeStatus() {
+  public void getNodeStatus() throws IOException, InterruptedException, URISyntaxException {
     final String nodeAddress = "23.108.83.12";
-    stubFor(get(
-        urlEqualTo("/api/v1/nodes/" + nodeAddress + '-' + Bitnodes.DEFAULT_NODE_PORT + '/'))
-        .withHeader("Accept", equalTo("application/json"))
-        .willReturn(aResponse()
-            .withStatus(200)
-            .withHeader("Content-Type", "application/json")
-            .withBodyFile("BitnodesNodeStatus.json")));
+    final MockResponse response = new MockResponse()
+        .addHeader("Content-Type", "application/json")
+        .setBody(new String(Files.readAllBytes(Paths.get(BitnodesClientTest.class
+            .getResource("/BitnodesNodeStatus.json").toURI())), UTF_8));
+    server.enqueue(response);
 
     final BitnodesNodeStatus nodeStatus = client.getNodeStatus(nodeAddress);
     assertEquals("", nodeStatus.getHostname());
@@ -137,19 +144,24 @@ public class BitnodesClientTest {
     assertEquals("AS15003", node.getAsn());
     assertEquals("Nobis Technology Group, LLC", node.getOrganizationName());
 
+    final RecordedRequest request = server.takeRequest();
+    assertEquals("application/json", request.getHeader("Accept"));
+    assertEquals("/api/v1/nodes/" + nodeAddress + '-' + Bitnodes.DEFAULT_NODE_PORT + '/',
+        request.getPath());
+
+    server.enqueue(response);
     assertEquals(nodeStatus, client.getNodeStatusFuture(nodeAddress).join());
+    server.takeRequest();
   }
 
   @Test
-  public void getNodeLatency() {
+  public void getNodeLatency() throws IOException, InterruptedException, URISyntaxException {
     final String nodeAddress = "23.108.83.12";
-    stubFor(get(urlEqualTo("/api/v1/nodes/"
-        + nodeAddress + '-' + Bitnodes.DEFAULT_NODE_PORT + "/latency/"))
-        .withHeader("Accept", equalTo("application/json"))
-        .willReturn(aResponse()
-            .withStatus(200)
-            .withHeader("Content-Type", "application/json")
-            .withBodyFile("BitnodesNodeLatency.json")));
+    final MockResponse response = new MockResponse()
+        .addHeader("Content-Type", "application/json")
+        .setBody(new String(Files.readAllBytes(Paths.get(BitnodesClientTest.class
+            .getResource("/BitnodesNodeLatency.json").toURI())), UTF_8));
+    server.enqueue(response);
 
     final BitnodesNodeLatency nodeLatency = client.getNodeLatency(nodeAddress);
     final List<? extends BitnodesStampedLatency> dailyLatency = nodeLatency.getDailyLatency();
@@ -170,18 +182,24 @@ public class BitnodesClientTest {
     assertEquals(1479135600L, stampedLatency.getTimestamp());
     assertEquals(104, stampedLatency.getLatency());
 
+    final RecordedRequest request = server.takeRequest();
+    assertEquals("application/json", request.getHeader("Accept"));
+    assertEquals("/api/v1/nodes/" + nodeAddress + '-' + Bitnodes.DEFAULT_NODE_PORT + "/latency/",
+        request.getPath());
+
+    server.enqueue(response);
     assertEquals(nodeLatency, client.getNodeLatencyFuture(nodeAddress).join());
+    server.takeRequest();
   }
 
   @Test
-  public void getLeaderboard() {
+  public void getLeaderboard() throws IOException, InterruptedException, URISyntaxException {
     final String nodeAddress = "23.108.83.12";
-    stubFor(get(urlEqualTo("/api/v1/nodes/leaderboard/?limit=5&page=3"))
-        .withHeader("Accept", equalTo("application/json"))
-        .willReturn(aResponse()
-            .withStatus(200)
-            .withHeader("Content-Type", "application/json")
-            .withBodyFile("BitnodesLeaderboard.json")));
+    final MockResponse response = new MockResponse()
+        .addHeader("Content-Type", "application/json")
+        .setBody(new String(Files.readAllBytes(Paths.get(BitnodesClientTest.class
+            .getResource("/BitnodesLeaderboard.json").toURI())), UTF_8));
+    server.enqueue(response);
 
     final BitnodesLeaderboard leaderboard = client.getLeaderboard(5, 3);
     assertEquals(2979, leaderboard.getCount());
@@ -208,19 +226,23 @@ public class BitnodesClientTest {
     assertEquals(9.1122, peerIndexData.getPeerIndex(), 0.0);
     assertEquals(13, peerIndexData.getRank());
 
+    final RecordedRequest request = server.takeRequest();
+    assertEquals("application/json", request.getHeader("Accept"));
+    assertEquals("/api/v1/nodes/leaderboard/?limit=5&page=3", request.getPath());
+
+    server.enqueue(response);
     assertEquals(leaderboard, client.getLeaderboardFuture(5, 3).join());
+    server.takeRequest();
   }
 
   @Test
-  public void getNodeRanking() {
+  public void getNodeRanking() throws IOException, InterruptedException, URISyntaxException {
     final String nodeAddress = "23.108.83.12";
-    stubFor(get(urlEqualTo("/api/v1/nodes/leaderboard/"
-        + nodeAddress + '-' + Bitnodes.DEFAULT_NODE_PORT + '/'))
-        .withHeader("Accept", equalTo("application/json"))
-        .willReturn(aResponse()
-            .withStatus(200)
-            .withHeader("Content-Type", "application/json")
-            .withBodyFile("BitnodesNodeRanking.json")));
+    final MockResponse response = new MockResponse()
+        .addHeader("Content-Type", "application/json")
+        .setBody(new String(Files.readAllBytes(Paths.get(BitnodesClientTest.class
+            .getResource("/BitnodesNodeRanking.json").toURI())), UTF_8));
+    server.enqueue(response);
 
     final BitnodesPeerIndexData peerIndexData = client.getNodeRanking(nodeAddress);
     assertEquals(nodeAddress + ":8333", peerIndexData.getNode());
@@ -238,18 +260,24 @@ public class BitnodesClientTest {
     assertEquals(9.1122, peerIndexData.getPeerIndex(), 0.0);
     assertEquals(13, peerIndexData.getRank());
 
+    final RecordedRequest request = server.takeRequest();
+    assertEquals("application/json", request.getHeader("Accept"));
+    assertEquals("/api/v1/nodes/leaderboard/"
+        + nodeAddress + '-' + Bitnodes.DEFAULT_NODE_PORT + '/', request.getPath());
+
+    server.enqueue(response);
     assertEquals(peerIndexData, client.getNodeRankingFuture(nodeAddress).join());
+    server.takeRequest();
   }
 
   @Test
-  public void getInvPropagation() {
+  public void getInvPropagation() throws IOException, InterruptedException, URISyntaxException {
     final String invHash = "ad3b660182c85c4b2246ddfcf855df0a894d7d44ceefa59711060a08dad785af";
-    stubFor(get(urlEqualTo("/api/v1/inv/" + invHash + '/'))
-        .withHeader("Accept", equalTo("application/json"))
-        .willReturn(aResponse()
-            .withStatus(200)
-            .withHeader("Content-Type", "application/json")
-            .withBodyFile("BitnodesInvPropagation.json")));
+    final MockResponse response = new MockResponse()
+        .addHeader("Content-Type", "application/json")
+        .setBody(new String(Files.readAllBytes(Paths.get(BitnodesClientTest.class
+            .getResource("/BitnodesInvPropagation.json").toURI())), UTF_8));
+    server.enqueue(response);
 
     final BitnodesInvPropagation invPropagation = client.getInvPropagation(invHash);
     assertEquals(invHash, invPropagation.getInvHash());
@@ -271,30 +299,41 @@ public class BitnodesClientTest {
     assertEquals(814, arrivalStats.getNinetiethPercentile());
     assertEquals(453, arrivalStats.getMean());
 
+    final RecordedRequest request = server.takeRequest();
+    assertEquals("application/json", request.getHeader("Accept"));
+    assertEquals("/api/v1/inv/" + invHash + '/', request.getPath());
+
+    server.enqueue(response);
     assertEquals(invPropagation, client.getInvPropagationFuture(invHash).join());
+    server.takeRequest();
   }
 
   @Test
-  public void postNodeBitcoinAddress() throws UnsupportedEncodingException {
+  public void postNodeBitcoinAddress() throws IOException, InterruptedException,
+      URISyntaxException {
     final String nodeAddress = "2a01:4f8:202:81b1::2";
     final String bitcoinAddress = "17vWico7jLKQoXtfWHpvEhHzzremZqQnNM";
     final String url = "http://[" + nodeAddress + ']';
 
-    stubFor(post(urlEqualTo("/api/v1/nodes/"
-        + URLEncoder.encode(nodeAddress, "UTF-8") + '-' + Bitnodes.DEFAULT_NODE_PORT + '/'))
-        .withHeader("Accept", equalTo("application/json"))
-        .withHeader("Content-Type", equalTo("application/x-www-form-urlencoded"))
-        .withRequestBody(equalTo("bitcoin_address=" + bitcoinAddress + "&url=" + url))
-        .willReturn(aResponse()
-            .withStatus(200)
-            .withHeader("Content-Type", "application/json")
-            .withBodyFile("BitnodesPostResponse.json")));
+    final MockResponse response = new MockResponse()
+        .addHeader("Content-Type", "application/json")
+        .setBody(new String(Files.readAllBytes(Paths.get(BitnodesClientTest.class
+            .getResource("/BitnodesPostResponse.json").toURI())), UTF_8));
+    server.enqueue(response);
 
     final BitnodesPostResponse postResponse = client.postNodeBitcoinAddress(bitcoinAddress, url,
         nodeAddress);
     assertTrue(postResponse.isSuccess());
 
+    final RecordedRequest request = server.takeRequest();
+    assertEquals("application/json", request.getHeader("Accept"));
+    assertEquals("application/x-www-form-urlencoded", request.getHeader("Content-Type"));
+    assertEquals("/api/v1/nodes/" + URLEncoder.encode(nodeAddress, "UTF-8")
+        + '-' + Bitnodes.DEFAULT_NODE_PORT + '/', request.getPath());
+
+    server.enqueue(response);
     assertEquals(postResponse, client.postNodeBitcoinAddressFuture(bitcoinAddress, url,
         nodeAddress).join());
+    server.takeRequest();
   }
 }
